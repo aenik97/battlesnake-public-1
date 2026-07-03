@@ -1,0 +1,1341 @@
+
+pytorch2.8.0:˘ﬁ
+æ
+x
+fe.cnn.0.weight
+fe.cnn.0.biasgetitemnode_Conv_314"Conv*
+group†*
+pads@@@@†*
+strides@@†*
+auto_pad"NOTSET†*
+	dilations@@†JÄ
+	namespaceÚ: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.1: torch.nn.modules.batchnorm.BatchNorm2d/_native_batch_norm_legit_no_training: aten._native_batch_norm_legit_no_training.defaultJ:
+!pkg.onnxscript.rewriter.rule_nameFuseBatchNormIntoConvJÁ
+pkg.torch.onnx.class_hierarchyƒ['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.batchnorm.BatchNorm2d', 'aten._native_batch_norm_legit_no_training.default']J®
+pkg.torch.onnx.fx_nodeç%_native_batch_norm_legit_no_training : [num_users=1] = call_function[target=torch.ops.aten._native_batch_norm_legit_no_training.default](args = (%conv2d, %p_fe_cnn_1_weight, %p_fe_cnn_1_bias, %b_fe_cnn_1_running_mean, %b_fe_cnn_1_running_var, 0.1, 1e-05), kwargs = {})Jf
+pkg.torch.onnx.name_scopesH['', 'fe', 'fe.cnn', 'fe.cnn.1', '_native_batch_norm_legit_no_training']J‡
+pkg.torch.onnx.stack_trace¡File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/batchnorm.py", line 193, in forward
+    return F.batch_norm(
+Í	
+getitemrelu	node_relu"ReluJ∫
+	namespace¨: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.2: torch.nn.modules.activation.ReLU/relu: aten.relu.defaultJ¡
+pkg.torch.onnx.class_hierarchyû['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.activation.ReLU', 'aten.relu.default']JÑ
+pkg.torch.onnx.fx_nodej%relu : [num_users=1] = call_function[target=torch.ops.aten.relu.default](args = (%getitem,), kwargs = {})JF
+pkg.torch.onnx.name_scopes(['', 'fe', 'fe.cnn', 'fe.cnn.2', 'relu']J˜
+pkg.torch.onnx.stack_traceÿFile "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/activation.py", line 135, in forward
+    return F.relu(input, inplace=self.inplace)
+À
+relu
+fe.cnn.3.weight
+fe.cnn.3.bias	getitem_3node_Conv_315"Conv*
+group†*
+pads@@@@†*
+strides@@†*
+auto_pad"NOTSET†*
+	dilations@@†JÇ
+	namespaceÙ: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.4: torch.nn.modules.batchnorm.BatchNorm2d/_native_batch_norm_legit_no_training_1: aten._native_batch_norm_legit_no_training.defaultJ:
+!pkg.onnxscript.rewriter.rule_nameFuseBatchNormIntoConvJÁ
+pkg.torch.onnx.class_hierarchyƒ['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.batchnorm.BatchNorm2d', 'aten._native_batch_norm_legit_no_training.default']J¨
+pkg.torch.onnx.fx_nodeë%_native_batch_norm_legit_no_training_1 : [num_users=1] = call_function[target=torch.ops.aten._native_batch_norm_legit_no_training.default](args = (%conv2d_1, %p_fe_cnn_4_weight, %p_fe_cnn_4_bias, %b_fe_cnn_4_running_mean, %b_fe_cnn_4_running_var, 0.1, 1e-05), kwargs = {})Jh
+pkg.torch.onnx.name_scopesJ['', 'fe', 'fe.cnn', 'fe.cnn.4', '_native_batch_norm_legit_no_training_1']J‡
+pkg.torch.onnx.stack_trace¡File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/batchnorm.py", line 193, in forward
+    return F.batch_norm(
+¯	
+	getitem_3relu_1node_relu_1"ReluJº
+	namespaceÆ: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.5: torch.nn.modules.activation.ReLU/relu_1: aten.relu.defaultJ¡
+pkg.torch.onnx.class_hierarchyû['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.activation.ReLU', 'aten.relu.default']Jà
+pkg.torch.onnx.fx_noden%relu_1 : [num_users=1] = call_function[target=torch.ops.aten.relu.default](args = (%getitem_3,), kwargs = {})JH
+pkg.torch.onnx.name_scopes*['', 'fe', 'fe.cnn', 'fe.cnn.5', 'relu_1']J˜
+pkg.torch.onnx.stack_traceÿFile "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/activation.py", line 135, in forward
+    return F.relu(input, inplace=self.inplace)
+Õ
+relu_1
+fe.cnn.6.weight
+fe.cnn.6.bias	getitem_6node_Conv_316"Conv*
+group†*
+pads@@@@†*
+strides@@†*
+auto_pad"NOTSET†*
+	dilations@@†JÇ
+	namespaceÙ: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.7: torch.nn.modules.batchnorm.BatchNorm2d/_native_batch_norm_legit_no_training_2: aten._native_batch_norm_legit_no_training.defaultJ:
+!pkg.onnxscript.rewriter.rule_nameFuseBatchNormIntoConvJÁ
+pkg.torch.onnx.class_hierarchyƒ['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.batchnorm.BatchNorm2d', 'aten._native_batch_norm_legit_no_training.default']J¨
+pkg.torch.onnx.fx_nodeë%_native_batch_norm_legit_no_training_2 : [num_users=1] = call_function[target=torch.ops.aten._native_batch_norm_legit_no_training.default](args = (%conv2d_2, %p_fe_cnn_7_weight, %p_fe_cnn_7_bias, %b_fe_cnn_7_running_mean, %b_fe_cnn_7_running_var, 0.1, 1e-05), kwargs = {})Jh
+pkg.torch.onnx.name_scopesJ['', 'fe', 'fe.cnn', 'fe.cnn.7', '_native_batch_norm_legit_no_training_2']J‡
+pkg.torch.onnx.stack_trace¡File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/batchnorm.py", line 193, in forward
+    return F.batch_norm(
+¯	
+	getitem_6relu_2node_relu_2"ReluJº
+	namespaceÆ: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.8: torch.nn.modules.activation.ReLU/relu_2: aten.relu.defaultJ¡
+pkg.torch.onnx.class_hierarchyû['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.activation.ReLU', 'aten.relu.default']Jà
+pkg.torch.onnx.fx_noden%relu_2 : [num_users=1] = call_function[target=torch.ops.aten.relu.default](args = (%getitem_6,), kwargs = {})JH
+pkg.torch.onnx.name_scopes*['', 'fe', 'fe.cnn', 'fe.cnn.8', 'relu_2']J˜
+pkg.torch.onnx.stack_traceÿFile "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/activation.py", line 135, in forward
+    return F.relu(input, inplace=self.inplace)
+“
+
+relu_2val_66node_Transpose_66"	Transpose*
+perm@@@ @†J≈
+	namespace∑: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.9: torch.nn.modules.pooling.AdaptiveAvgPool2d/index: aten.index.TensorJÀ
+pkg.torch.onnx.class_hierarchy®['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.pooling.AdaptiveAvgPool2d', 'aten.index.Tensor']J¨
+pkg.torch.onnx.fx_nodeë%index : [num_users=1] = call_function[target=torch.ops.aten.index.Tensor](args = (%relu_2, [None, None, %unsqueeze_3, %minimum_1]), kwargs = {})JG
+pkg.torch.onnx.name_scopes)['', 'fe', 'fe.cnn', 'fe.cnn.9', 'index']JÄ
+pkg.torch.onnx.stack_trace·File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/pooling.py", line 1475, in forward
+    return F.adaptive_avg_pool2d(input, self.output_size)
+ÿ
+
+val_66
+val_73val_74node_GatherND_74"GatherND*
+
+batch_dims †J≈
+	namespace∑: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.9: torch.nn.modules.pooling.AdaptiveAvgPool2d/index: aten.index.TensorJÀ
+pkg.torch.onnx.class_hierarchy®['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.pooling.AdaptiveAvgPool2d', 'aten.index.Tensor']J¨
+pkg.torch.onnx.fx_nodeë%index : [num_users=1] = call_function[target=torch.ops.aten.index.Tensor](args = (%relu_2, [None, None, %unsqueeze_3, %minimum_1]), kwargs = {})JG
+pkg.torch.onnx.name_scopes)['', 'fe', 'fe.cnn', 'fe.cnn.9', 'index']JÄ
+pkg.torch.onnx.stack_trace·File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/pooling.py", line 1475, in forward
+    return F.adaptive_avg_pool2d(input, self.output_size)
+Œ
+
+val_74index
+node_index"	Transpose*
+perm@@@ @@@†J≈
+	namespace∑: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.9: torch.nn.modules.pooling.AdaptiveAvgPool2d/index: aten.index.TensorJÀ
+pkg.torch.onnx.class_hierarchy®['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.pooling.AdaptiveAvgPool2d', 'aten.index.Tensor']J¨
+pkg.torch.onnx.fx_nodeë%index : [num_users=1] = call_function[target=torch.ops.aten.index.Tensor](args = (%relu_2, [None, None, %unsqueeze_3, %minimum_1]), kwargs = {})JG
+pkg.torch.onnx.name_scopes)['', 'fe', 'fe.cnn', 'fe.cnn.9', 'index']JÄ
+pkg.torch.onnx.stack_trace·File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/pooling.py", line 1475, in forward
+    return F.adaptive_avg_pool2d(input, self.output_size)
+·
+
+unsqueeze_6
+val_76
+indexmasked_fillnode_masked_fill"WhereJ—
+	namespace√: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.9: torch.nn.modules.pooling.AdaptiveAvgPool2d/masked_fill: aten.masked_fill.ScalarJ—
+pkg.torch.onnx.class_hierarchyÆ['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.pooling.AdaptiveAvgPool2d', 'aten.masked_fill.Scalar']J¢
+pkg.torch.onnx.fx_nodeá%masked_fill : [num_users=1] = call_function[target=torch.ops.aten.masked_fill.Scalar](args = (%index, %unsqueeze_6, 0.0), kwargs = {})JM
+pkg.torch.onnx.name_scopes/['', 'fe', 'fe.cnn', 'fe.cnn.9', 'masked_fill']JÄ
+pkg.torch.onnx.stack_trace·File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/pooling.py", line 1475, in forward
+    return F.adaptive_avg_pool2d(input, self.output_size)
+Í
+
+ge_1
+val_76
+masked_fillmasked_fill_1node_masked_fill_1"WhereJ”
+	namespace≈: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.9: torch.nn.modules.pooling.AdaptiveAvgPool2d/masked_fill_1: aten.masked_fill.ScalarJ—
+pkg.torch.onnx.class_hierarchyÆ['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.pooling.AdaptiveAvgPool2d', 'aten.masked_fill.Scalar']J§
+pkg.torch.onnx.fx_nodeâ%masked_fill_1 : [num_users=16] = call_function[target=torch.ops.aten.masked_fill.Scalar](args = (%masked_fill, %ge_1, 0.0), kwargs = {})JO
+pkg.torch.onnx.name_scopes1['', 'fe', 'fe.cnn', 'fe.cnn.9', 'masked_fill_1']JÄ
+pkg.torch.onnx.stack_trace·File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/pooling.py", line 1475, in forward
+    return F.adaptive_avg_pool2d(input, self.output_size)
+≥
+
+masked_fill_1
+val_22selectnode_select"Gather*
+axis†Jƒ
+	namespace∂: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.9: torch.nn.modules.pooling.AdaptiveAvgPool2d/select: aten.select.intJ…
+pkg.torch.onnx.class_hierarchy¶['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.pooling.AdaptiveAvgPool2d', 'aten.select.int']Jè
+pkg.torch.onnx.fx_nodeu%select : [num_users=1] = call_function[target=torch.ops.aten.select.int](args = (%masked_fill_1, 3, 0), kwargs = {})JH
+pkg.torch.onnx.name_scopes*['', 'fe', 'fe.cnn', 'fe.cnn.9', 'select']JÄ
+pkg.torch.onnx.stack_trace·File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/pooling.py", line 1475, in forward
+    return F.adaptive_avg_pool2d(input, self.output_size)
+∞
+
+select
+val_22select_1node_select_1"Gather*
+axis†J∆
+	namespace∏: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.9: torch.nn.modules.pooling.AdaptiveAvgPool2d/select_1: aten.select.intJ…
+pkg.torch.onnx.class_hierarchy¶['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.pooling.AdaptiveAvgPool2d', 'aten.select.int']Jã
+pkg.torch.onnx.fx_nodeq%select_1 : [num_users=1] = call_function[target=torch.ops.aten.select.int](args = (%slice_1, 4, 0), kwargs = {})JJ
+pkg.torch.onnx.name_scopes,['', 'fe', 'fe.cnn', 'fe.cnn.9', 'select_1']JÄ
+pkg.torch.onnx.stack_trace·File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/pooling.py", line 1475, in forward
+    return F.adaptive_avg_pool2d(input, self.output_size)
+∞
+
+select
+val_24select_3node_select_3"Gather*
+axis†J∆
+	namespace∏: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.9: torch.nn.modules.pooling.AdaptiveAvgPool2d/select_3: aten.select.intJ…
+pkg.torch.onnx.class_hierarchy¶['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.pooling.AdaptiveAvgPool2d', 'aten.select.int']Jã
+pkg.torch.onnx.fx_nodeq%select_3 : [num_users=1] = call_function[target=torch.ops.aten.select.int](args = (%slice_2, 4, 1), kwargs = {})JJ
+pkg.torch.onnx.name_scopes,['', 'fe', 'fe.cnn', 'fe.cnn.9', 'select_3']JÄ
+pkg.torch.onnx.stack_trace·File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/pooling.py", line 1475, in forward
+    return F.adaptive_avg_pool2d(input, self.output_size)
+õ
+
+select_1
+select_3add_6
+node_add_6"AddJ√
+	namespaceµ: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.9: torch.nn.modules.pooling.AdaptiveAvgPool2d/add_6: aten.add.TensorJ…
+pkg.torch.onnx.class_hierarchy¶['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.pooling.AdaptiveAvgPool2d', 'aten.add.Tensor']Jé
+pkg.torch.onnx.fx_nodet%add_6 : [num_users=1] = call_function[target=torch.ops.aten.add.Tensor](args = (%select_1, %select_3), kwargs = {})JG
+pkg.torch.onnx.name_scopes)['', 'fe', 'fe.cnn', 'fe.cnn.9', 'add_6']JÄ
+pkg.torch.onnx.stack_trace·File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/pooling.py", line 1475, in forward
+    return F.adaptive_avg_pool2d(input, self.output_size)
+±
+
+select
+val_110select_5node_select_5"Gather*
+axis†J∆
+	namespace∏: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.9: torch.nn.modules.pooling.AdaptiveAvgPool2d/select_5: aten.select.intJ…
+pkg.torch.onnx.class_hierarchy¶['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.pooling.AdaptiveAvgPool2d', 'aten.select.int']Jã
+pkg.torch.onnx.fx_nodeq%select_5 : [num_users=1] = call_function[target=torch.ops.aten.select.int](args = (%slice_3, 4, 2), kwargs = {})JJ
+pkg.torch.onnx.name_scopes,['', 'fe', 'fe.cnn', 'fe.cnn.9', 'select_5']JÄ
+pkg.torch.onnx.stack_trace·File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/pooling.py", line 1475, in forward
+    return F.adaptive_avg_pool2d(input, self.output_size)
+ï
+
+add_6
+select_5add_7
+node_add_7"AddJ√
+	namespaceµ: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.9: torch.nn.modules.pooling.AdaptiveAvgPool2d/add_7: aten.add.TensorJ…
+pkg.torch.onnx.class_hierarchy¶['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.pooling.AdaptiveAvgPool2d', 'aten.add.Tensor']Jã
+pkg.torch.onnx.fx_nodeq%add_7 : [num_users=1] = call_function[target=torch.ops.aten.add.Tensor](args = (%add_6, %select_5), kwargs = {})JG
+pkg.torch.onnx.name_scopes)['', 'fe', 'fe.cnn', 'fe.cnn.9', 'add_7']JÄ
+pkg.torch.onnx.stack_trace·File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/pooling.py", line 1475, in forward
+    return F.adaptive_avg_pool2d(input, self.output_size)
+∞
+
+select
+val_85select_7node_select_7"Gather*
+axis†J∆
+	namespace∏: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.9: torch.nn.modules.pooling.AdaptiveAvgPool2d/select_7: aten.select.intJ…
+pkg.torch.onnx.class_hierarchy¶['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.pooling.AdaptiveAvgPool2d', 'aten.select.int']Jã
+pkg.torch.onnx.fx_nodeq%select_7 : [num_users=1] = call_function[target=torch.ops.aten.select.int](args = (%slice_4, 4, 3), kwargs = {})JJ
+pkg.torch.onnx.name_scopes,['', 'fe', 'fe.cnn', 'fe.cnn.9', 'select_7']JÄ
+pkg.torch.onnx.stack_trace·File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/pooling.py", line 1475, in forward
+    return F.adaptive_avg_pool2d(input, self.output_size)
+ï
+
+add_7
+select_7add_8
+node_add_8"AddJ√
+	namespaceµ: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.9: torch.nn.modules.pooling.AdaptiveAvgPool2d/add_8: aten.add.TensorJ…
+pkg.torch.onnx.class_hierarchy¶['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.pooling.AdaptiveAvgPool2d', 'aten.add.Tensor']Jã
+pkg.torch.onnx.fx_nodeq%add_8 : [num_users=1] = call_function[target=torch.ops.aten.add.Tensor](args = (%add_7, %select_7), kwargs = {})JG
+pkg.torch.onnx.name_scopes)['', 'fe', 'fe.cnn', 'fe.cnn.9', 'add_8']JÄ
+pkg.torch.onnx.stack_trace·File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/pooling.py", line 1475, in forward
+    return F.adaptive_avg_pool2d(input, self.output_size)
+Ω
+
+masked_fill_1
+val_24select_8node_select_8"Gather*
+axis†J∆
+	namespace∏: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.9: torch.nn.modules.pooling.AdaptiveAvgPool2d/select_8: aten.select.intJ…
+pkg.torch.onnx.class_hierarchy¶['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.pooling.AdaptiveAvgPool2d', 'aten.select.int']Jë
+pkg.torch.onnx.fx_nodew%select_8 : [num_users=1] = call_function[target=torch.ops.aten.select.int](args = (%masked_fill_1, 3, 1), kwargs = {})JJ
+pkg.torch.onnx.name_scopes,['', 'fe', 'fe.cnn', 'fe.cnn.9', 'select_8']JÄ
+pkg.torch.onnx.stack_trace·File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/pooling.py", line 1475, in forward
+    return F.adaptive_avg_pool2d(input, self.output_size)
+≤
+
+select_8
+val_22select_9node_select_9"Gather*
+axis†J∆
+	namespace∏: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.9: torch.nn.modules.pooling.AdaptiveAvgPool2d/select_9: aten.select.intJ…
+pkg.torch.onnx.class_hierarchy¶['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.pooling.AdaptiveAvgPool2d', 'aten.select.int']Jã
+pkg.torch.onnx.fx_nodeq%select_9 : [num_users=1] = call_function[target=torch.ops.aten.select.int](args = (%slice_5, 4, 0), kwargs = {})JJ
+pkg.torch.onnx.name_scopes,['', 'fe', 'fe.cnn', 'fe.cnn.9', 'select_9']JÄ
+pkg.torch.onnx.stack_trace·File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/pooling.py", line 1475, in forward
+    return F.adaptive_avg_pool2d(input, self.output_size)
+ï
+
+add_8
+select_9add_9
+node_add_9"AddJ√
+	namespaceµ: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.9: torch.nn.modules.pooling.AdaptiveAvgPool2d/add_9: aten.add.TensorJ…
+pkg.torch.onnx.class_hierarchy¶['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.pooling.AdaptiveAvgPool2d', 'aten.add.Tensor']Jã
+pkg.torch.onnx.fx_nodeq%add_9 : [num_users=1] = call_function[target=torch.ops.aten.add.Tensor](args = (%add_8, %select_9), kwargs = {})JG
+pkg.torch.onnx.name_scopes)['', 'fe', 'fe.cnn', 'fe.cnn.9', 'add_9']JÄ
+pkg.torch.onnx.stack_trace·File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/pooling.py", line 1475, in forward
+    return F.adaptive_avg_pool2d(input, self.output_size)
+∑
+
+select_8
+val_24	select_11node_select_11"Gather*
+axis†J«
+	namespaceπ: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.9: torch.nn.modules.pooling.AdaptiveAvgPool2d/select_11: aten.select.intJ…
+pkg.torch.onnx.class_hierarchy¶['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.pooling.AdaptiveAvgPool2d', 'aten.select.int']Jå
+pkg.torch.onnx.fx_noder%select_11 : [num_users=1] = call_function[target=torch.ops.aten.select.int](args = (%slice_6, 4, 1), kwargs = {})JK
+pkg.torch.onnx.name_scopes-['', 'fe', 'fe.cnn', 'fe.cnn.9', 'select_11']JÄ
+pkg.torch.onnx.stack_trace·File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/pooling.py", line 1475, in forward
+    return F.adaptive_avg_pool2d(input, self.output_size)
+ú
+
+add_9
+	select_11add_10node_add_10"AddJƒ
+	namespace∂: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.9: torch.nn.modules.pooling.AdaptiveAvgPool2d/add_10: aten.add.TensorJ…
+pkg.torch.onnx.class_hierarchy¶['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.pooling.AdaptiveAvgPool2d', 'aten.add.Tensor']Jç
+pkg.torch.onnx.fx_nodes%add_10 : [num_users=1] = call_function[target=torch.ops.aten.add.Tensor](args = (%add_9, %select_11), kwargs = {})JH
+pkg.torch.onnx.name_scopes*['', 'fe', 'fe.cnn', 'fe.cnn.9', 'add_10']JÄ
+pkg.torch.onnx.stack_trace·File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/pooling.py", line 1475, in forward
+    return F.adaptive_avg_pool2d(input, self.output_size)
+∏
+
+select_8
+val_110	select_13node_select_13"Gather*
+axis†J«
+	namespaceπ: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.9: torch.nn.modules.pooling.AdaptiveAvgPool2d/select_13: aten.select.intJ…
+pkg.torch.onnx.class_hierarchy¶['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.pooling.AdaptiveAvgPool2d', 'aten.select.int']Jå
+pkg.torch.onnx.fx_noder%select_13 : [num_users=1] = call_function[target=torch.ops.aten.select.int](args = (%slice_7, 4, 2), kwargs = {})JK
+pkg.torch.onnx.name_scopes-['', 'fe', 'fe.cnn', 'fe.cnn.9', 'select_13']JÄ
+pkg.torch.onnx.stack_trace·File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/pooling.py", line 1475, in forward
+    return F.adaptive_avg_pool2d(input, self.output_size)
+û
+
+add_10
+	select_13add_11node_add_11"AddJƒ
+	namespace∂: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.9: torch.nn.modules.pooling.AdaptiveAvgPool2d/add_11: aten.add.TensorJ…
+pkg.torch.onnx.class_hierarchy¶['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.pooling.AdaptiveAvgPool2d', 'aten.add.Tensor']Jé
+pkg.torch.onnx.fx_nodet%add_11 : [num_users=1] = call_function[target=torch.ops.aten.add.Tensor](args = (%add_10, %select_13), kwargs = {})JH
+pkg.torch.onnx.name_scopes*['', 'fe', 'fe.cnn', 'fe.cnn.9', 'add_11']JÄ
+pkg.torch.onnx.stack_trace·File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/pooling.py", line 1475, in forward
+    return F.adaptive_avg_pool2d(input, self.output_size)
+∑
+
+select_8
+val_85	select_15node_select_15"Gather*
+axis†J«
+	namespaceπ: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.9: torch.nn.modules.pooling.AdaptiveAvgPool2d/select_15: aten.select.intJ…
+pkg.torch.onnx.class_hierarchy¶['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.pooling.AdaptiveAvgPool2d', 'aten.select.int']Jå
+pkg.torch.onnx.fx_noder%select_15 : [num_users=1] = call_function[target=torch.ops.aten.select.int](args = (%slice_8, 4, 3), kwargs = {})JK
+pkg.torch.onnx.name_scopes-['', 'fe', 'fe.cnn', 'fe.cnn.9', 'select_15']JÄ
+pkg.torch.onnx.stack_trace·File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/pooling.py", line 1475, in forward
+    return F.adaptive_avg_pool2d(input, self.output_size)
+û
+
+add_11
+	select_15add_12node_add_12"AddJƒ
+	namespace∂: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.9: torch.nn.modules.pooling.AdaptiveAvgPool2d/add_12: aten.add.TensorJ…
+pkg.torch.onnx.class_hierarchy¶['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.pooling.AdaptiveAvgPool2d', 'aten.add.Tensor']Jé
+pkg.torch.onnx.fx_nodet%add_12 : [num_users=1] = call_function[target=torch.ops.aten.add.Tensor](args = (%add_11, %select_15), kwargs = {})JH
+pkg.torch.onnx.name_scopes*['', 'fe', 'fe.cnn', 'fe.cnn.9', 'add_12']JÄ
+pkg.torch.onnx.stack_trace·File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/pooling.py", line 1475, in forward
+    return F.adaptive_avg_pool2d(input, self.output_size)
+√
+
+masked_fill_1
+val_110	select_16node_select_16"Gather*
+axis†J«
+	namespaceπ: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.9: torch.nn.modules.pooling.AdaptiveAvgPool2d/select_16: aten.select.intJ…
+pkg.torch.onnx.class_hierarchy¶['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.pooling.AdaptiveAvgPool2d', 'aten.select.int']Jí
+pkg.torch.onnx.fx_nodex%select_16 : [num_users=1] = call_function[target=torch.ops.aten.select.int](args = (%masked_fill_1, 3, 2), kwargs = {})JK
+pkg.torch.onnx.name_scopes-['', 'fe', 'fe.cnn', 'fe.cnn.9', 'select_16']JÄ
+pkg.torch.onnx.stack_trace·File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/pooling.py", line 1475, in forward
+    return F.adaptive_avg_pool2d(input, self.output_size)
+∏
+
+	select_16
+val_22	select_17node_select_17"Gather*
+axis†J«
+	namespaceπ: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.9: torch.nn.modules.pooling.AdaptiveAvgPool2d/select_17: aten.select.intJ…
+pkg.torch.onnx.class_hierarchy¶['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.pooling.AdaptiveAvgPool2d', 'aten.select.int']Jå
+pkg.torch.onnx.fx_noder%select_17 : [num_users=1] = call_function[target=torch.ops.aten.select.int](args = (%slice_9, 4, 0), kwargs = {})JK
+pkg.torch.onnx.name_scopes-['', 'fe', 'fe.cnn', 'fe.cnn.9', 'select_17']JÄ
+pkg.torch.onnx.stack_trace·File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/pooling.py", line 1475, in forward
+    return F.adaptive_avg_pool2d(input, self.output_size)
+û
+
+add_12
+	select_17add_13node_add_13"AddJƒ
+	namespace∂: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.9: torch.nn.modules.pooling.AdaptiveAvgPool2d/add_13: aten.add.TensorJ…
+pkg.torch.onnx.class_hierarchy¶['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.pooling.AdaptiveAvgPool2d', 'aten.add.Tensor']Jé
+pkg.torch.onnx.fx_nodet%add_13 : [num_users=1] = call_function[target=torch.ops.aten.add.Tensor](args = (%add_12, %select_17), kwargs = {})JH
+pkg.torch.onnx.name_scopes*['', 'fe', 'fe.cnn', 'fe.cnn.9', 'add_13']JÄ
+pkg.torch.onnx.stack_trace·File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/pooling.py", line 1475, in forward
+    return F.adaptive_avg_pool2d(input, self.output_size)
+π
+
+	select_16
+val_24	select_19node_select_19"Gather*
+axis†J«
+	namespaceπ: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.9: torch.nn.modules.pooling.AdaptiveAvgPool2d/select_19: aten.select.intJ…
+pkg.torch.onnx.class_hierarchy¶['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.pooling.AdaptiveAvgPool2d', 'aten.select.int']Jç
+pkg.torch.onnx.fx_nodes%select_19 : [num_users=1] = call_function[target=torch.ops.aten.select.int](args = (%slice_10, 4, 1), kwargs = {})JK
+pkg.torch.onnx.name_scopes-['', 'fe', 'fe.cnn', 'fe.cnn.9', 'select_19']JÄ
+pkg.torch.onnx.stack_trace·File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/pooling.py", line 1475, in forward
+    return F.adaptive_avg_pool2d(input, self.output_size)
+û
+
+add_13
+	select_19add_14node_add_14"AddJƒ
+	namespace∂: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.9: torch.nn.modules.pooling.AdaptiveAvgPool2d/add_14: aten.add.TensorJ…
+pkg.torch.onnx.class_hierarchy¶['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.pooling.AdaptiveAvgPool2d', 'aten.add.Tensor']Jé
+pkg.torch.onnx.fx_nodet%add_14 : [num_users=1] = call_function[target=torch.ops.aten.add.Tensor](args = (%add_13, %select_19), kwargs = {})JH
+pkg.torch.onnx.name_scopes*['', 'fe', 'fe.cnn', 'fe.cnn.9', 'add_14']JÄ
+pkg.torch.onnx.stack_trace·File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/pooling.py", line 1475, in forward
+    return F.adaptive_avg_pool2d(input, self.output_size)
+∫
+
+	select_16
+val_110	select_21node_select_21"Gather*
+axis†J«
+	namespaceπ: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.9: torch.nn.modules.pooling.AdaptiveAvgPool2d/select_21: aten.select.intJ…
+pkg.torch.onnx.class_hierarchy¶['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.pooling.AdaptiveAvgPool2d', 'aten.select.int']Jç
+pkg.torch.onnx.fx_nodes%select_21 : [num_users=1] = call_function[target=torch.ops.aten.select.int](args = (%slice_11, 4, 2), kwargs = {})JK
+pkg.torch.onnx.name_scopes-['', 'fe', 'fe.cnn', 'fe.cnn.9', 'select_21']JÄ
+pkg.torch.onnx.stack_trace·File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/pooling.py", line 1475, in forward
+    return F.adaptive_avg_pool2d(input, self.output_size)
+û
+
+add_14
+	select_21add_15node_add_15"AddJƒ
+	namespace∂: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.9: torch.nn.modules.pooling.AdaptiveAvgPool2d/add_15: aten.add.TensorJ…
+pkg.torch.onnx.class_hierarchy¶['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.pooling.AdaptiveAvgPool2d', 'aten.add.Tensor']Jé
+pkg.torch.onnx.fx_nodet%add_15 : [num_users=1] = call_function[target=torch.ops.aten.add.Tensor](args = (%add_14, %select_21), kwargs = {})JH
+pkg.torch.onnx.name_scopes*['', 'fe', 'fe.cnn', 'fe.cnn.9', 'add_15']JÄ
+pkg.torch.onnx.stack_trace·File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/pooling.py", line 1475, in forward
+    return F.adaptive_avg_pool2d(input, self.output_size)
+π
+
+	select_16
+val_85	select_23node_select_23"Gather*
+axis†J«
+	namespaceπ: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.9: torch.nn.modules.pooling.AdaptiveAvgPool2d/select_23: aten.select.intJ…
+pkg.torch.onnx.class_hierarchy¶['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.pooling.AdaptiveAvgPool2d', 'aten.select.int']Jç
+pkg.torch.onnx.fx_nodes%select_23 : [num_users=1] = call_function[target=torch.ops.aten.select.int](args = (%slice_12, 4, 3), kwargs = {})JK
+pkg.torch.onnx.name_scopes-['', 'fe', 'fe.cnn', 'fe.cnn.9', 'select_23']JÄ
+pkg.torch.onnx.stack_trace·File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/pooling.py", line 1475, in forward
+    return F.adaptive_avg_pool2d(input, self.output_size)
+û
+
+add_15
+	select_23add_16node_add_16"AddJƒ
+	namespace∂: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.9: torch.nn.modules.pooling.AdaptiveAvgPool2d/add_16: aten.add.TensorJ…
+pkg.torch.onnx.class_hierarchy¶['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.pooling.AdaptiveAvgPool2d', 'aten.add.Tensor']Jé
+pkg.torch.onnx.fx_nodet%add_16 : [num_users=1] = call_function[target=torch.ops.aten.add.Tensor](args = (%add_15, %select_23), kwargs = {})JH
+pkg.torch.onnx.name_scopes*['', 'fe', 'fe.cnn', 'fe.cnn.9', 'add_16']JÄ
+pkg.torch.onnx.stack_trace·File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/pooling.py", line 1475, in forward
+    return F.adaptive_avg_pool2d(input, self.output_size)
+¬
+
+masked_fill_1
+val_85	select_24node_select_24"Gather*
+axis†J«
+	namespaceπ: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.9: torch.nn.modules.pooling.AdaptiveAvgPool2d/select_24: aten.select.intJ…
+pkg.torch.onnx.class_hierarchy¶['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.pooling.AdaptiveAvgPool2d', 'aten.select.int']Jí
+pkg.torch.onnx.fx_nodex%select_24 : [num_users=1] = call_function[target=torch.ops.aten.select.int](args = (%masked_fill_1, 3, 3), kwargs = {})JK
+pkg.torch.onnx.name_scopes-['', 'fe', 'fe.cnn', 'fe.cnn.9', 'select_24']JÄ
+pkg.torch.onnx.stack_trace·File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/pooling.py", line 1475, in forward
+    return F.adaptive_avg_pool2d(input, self.output_size)
+π
+
+	select_24
+val_22	select_25node_select_25"Gather*
+axis†J«
+	namespaceπ: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.9: torch.nn.modules.pooling.AdaptiveAvgPool2d/select_25: aten.select.intJ…
+pkg.torch.onnx.class_hierarchy¶['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.pooling.AdaptiveAvgPool2d', 'aten.select.int']Jç
+pkg.torch.onnx.fx_nodes%select_25 : [num_users=1] = call_function[target=torch.ops.aten.select.int](args = (%slice_13, 4, 0), kwargs = {})JK
+pkg.torch.onnx.name_scopes-['', 'fe', 'fe.cnn', 'fe.cnn.9', 'select_25']JÄ
+pkg.torch.onnx.stack_trace·File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/pooling.py", line 1475, in forward
+    return F.adaptive_avg_pool2d(input, self.output_size)
+û
+
+add_16
+	select_25add_17node_add_17"AddJƒ
+	namespace∂: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.9: torch.nn.modules.pooling.AdaptiveAvgPool2d/add_17: aten.add.TensorJ…
+pkg.torch.onnx.class_hierarchy¶['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.pooling.AdaptiveAvgPool2d', 'aten.add.Tensor']Jé
+pkg.torch.onnx.fx_nodet%add_17 : [num_users=1] = call_function[target=torch.ops.aten.add.Tensor](args = (%add_16, %select_25), kwargs = {})JH
+pkg.torch.onnx.name_scopes*['', 'fe', 'fe.cnn', 'fe.cnn.9', 'add_17']JÄ
+pkg.torch.onnx.stack_trace·File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/pooling.py", line 1475, in forward
+    return F.adaptive_avg_pool2d(input, self.output_size)
+π
+
+	select_24
+val_24	select_27node_select_27"Gather*
+axis†J«
+	namespaceπ: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.9: torch.nn.modules.pooling.AdaptiveAvgPool2d/select_27: aten.select.intJ…
+pkg.torch.onnx.class_hierarchy¶['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.pooling.AdaptiveAvgPool2d', 'aten.select.int']Jç
+pkg.torch.onnx.fx_nodes%select_27 : [num_users=1] = call_function[target=torch.ops.aten.select.int](args = (%slice_14, 4, 1), kwargs = {})JK
+pkg.torch.onnx.name_scopes-['', 'fe', 'fe.cnn', 'fe.cnn.9', 'select_27']JÄ
+pkg.torch.onnx.stack_trace·File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/pooling.py", line 1475, in forward
+    return F.adaptive_avg_pool2d(input, self.output_size)
+û
+
+add_17
+	select_27add_18node_add_18"AddJƒ
+	namespace∂: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.9: torch.nn.modules.pooling.AdaptiveAvgPool2d/add_18: aten.add.TensorJ…
+pkg.torch.onnx.class_hierarchy¶['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.pooling.AdaptiveAvgPool2d', 'aten.add.Tensor']Jé
+pkg.torch.onnx.fx_nodet%add_18 : [num_users=1] = call_function[target=torch.ops.aten.add.Tensor](args = (%add_17, %select_27), kwargs = {})JH
+pkg.torch.onnx.name_scopes*['', 'fe', 'fe.cnn', 'fe.cnn.9', 'add_18']JÄ
+pkg.torch.onnx.stack_trace·File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/pooling.py", line 1475, in forward
+    return F.adaptive_avg_pool2d(input, self.output_size)
+∫
+
+	select_24
+val_110	select_29node_select_29"Gather*
+axis†J«
+	namespaceπ: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.9: torch.nn.modules.pooling.AdaptiveAvgPool2d/select_29: aten.select.intJ…
+pkg.torch.onnx.class_hierarchy¶['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.pooling.AdaptiveAvgPool2d', 'aten.select.int']Jç
+pkg.torch.onnx.fx_nodes%select_29 : [num_users=1] = call_function[target=torch.ops.aten.select.int](args = (%slice_15, 4, 2), kwargs = {})JK
+pkg.torch.onnx.name_scopes-['', 'fe', 'fe.cnn', 'fe.cnn.9', 'select_29']JÄ
+pkg.torch.onnx.stack_trace·File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/pooling.py", line 1475, in forward
+    return F.adaptive_avg_pool2d(input, self.output_size)
+û
+
+add_18
+	select_29add_19node_add_19"AddJƒ
+	namespace∂: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.9: torch.nn.modules.pooling.AdaptiveAvgPool2d/add_19: aten.add.TensorJ…
+pkg.torch.onnx.class_hierarchy¶['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.pooling.AdaptiveAvgPool2d', 'aten.add.Tensor']Jé
+pkg.torch.onnx.fx_nodet%add_19 : [num_users=1] = call_function[target=torch.ops.aten.add.Tensor](args = (%add_18, %select_29), kwargs = {})JH
+pkg.torch.onnx.name_scopes*['', 'fe', 'fe.cnn', 'fe.cnn.9', 'add_19']JÄ
+pkg.torch.onnx.stack_trace·File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/pooling.py", line 1475, in forward
+    return F.adaptive_avg_pool2d(input, self.output_size)
+π
+
+	select_24
+val_85	select_31node_select_31"Gather*
+axis†J«
+	namespaceπ: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.9: torch.nn.modules.pooling.AdaptiveAvgPool2d/select_31: aten.select.intJ…
+pkg.torch.onnx.class_hierarchy¶['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.pooling.AdaptiveAvgPool2d', 'aten.select.int']Jç
+pkg.torch.onnx.fx_nodes%select_31 : [num_users=1] = call_function[target=torch.ops.aten.select.int](args = (%slice_16, 4, 3), kwargs = {})JK
+pkg.torch.onnx.name_scopes-['', 'fe', 'fe.cnn', 'fe.cnn.9', 'select_31']JÄ
+pkg.torch.onnx.stack_trace·File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/pooling.py", line 1475, in forward
+    return F.adaptive_avg_pool2d(input, self.output_size)
+û
+
+add_19
+	select_31add_20node_add_20"AddJƒ
+	namespace∂: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.9: torch.nn.modules.pooling.AdaptiveAvgPool2d/add_20: aten.add.TensorJ…
+pkg.torch.onnx.class_hierarchy¶['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.pooling.AdaptiveAvgPool2d', 'aten.add.Tensor']Jé
+pkg.torch.onnx.fx_nodet%add_20 : [num_users=1] = call_function[target=torch.ops.aten.add.Tensor](args = (%add_19, %select_31), kwargs = {})JH
+pkg.torch.onnx.name_scopes*['', 'fe', 'fe.cnn', 'fe.cnn.9', 'add_20']JÄ
+pkg.torch.onnx.stack_trace·File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/pooling.py", line 1475, in forward
+    return F.adaptive_avg_pool2d(input, self.output_size)
+¿
+
+add_20
+convert_element_type_defaultdiv_4
+node_div_4"DivJ√
+	namespaceµ: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.9: torch.nn.modules.pooling.AdaptiveAvgPool2d/div_4: aten.div.TensorJ…
+pkg.torch.onnx.class_hierarchy¶['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.pooling.AdaptiveAvgPool2d', 'aten.div.Tensor']J°
+pkg.torch.onnx.fx_nodeÜ%div_4 : [num_users=1] = call_function[target=torch.ops.aten.div.Tensor](args = (%add_20, %convert_element_type_default), kwargs = {})JG
+pkg.torch.onnx.name_scopes)['', 'fe', 'fe.cnn', 'fe.cnn.9', 'div_4']JÄ
+pkg.torch.onnx.stack_trace·File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/pooling.py", line 1475, in forward
+    return F.adaptive_avg_pool2d(input, self.output_size)
+î
+
+div_4
+val_244view	node_view"Reshape*
+	allowzero†Jª
+	namespace≠: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.10: torch.nn.modules.flatten.Flatten/view: aten.view.defaultJ¡
+pkg.torch.onnx.class_hierarchyû['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.flatten.Flatten', 'aten.view.default']Jå
+pkg.torch.onnx.fx_noder%view : [num_users=1] = call_function[target=torch.ops.aten.view.default](args = (%div_4, [1, 1024]), kwargs = {})JG
+pkg.torch.onnx.name_scopes)['', 'fe', 'fe.cnn', 'fe.cnn.10', 'view']J˚
+pkg.torch.onnx.stack_trace‹File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/flatten.py", line 53, in forward
+    return input.flatten(self.start_dim, self.end_dim)
+˚
+
+view
+fe.cnn.11.weight
+fe.cnn.11.biaslinearnode_linear"Gemm*
+beta  Ä?†*
+transB†*
+alpha  Ä?†*
+transA †JΩ
+	namespaceØ: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.11: torch.nn.modules.linear.Linear/linear: aten.linear.defaultJ¡
+pkg.torch.onnx.class_hierarchyû['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.linear.Linear', 'aten.linear.default']J≠
+pkg.torch.onnx.fx_nodeí%linear : [num_users=1] = call_function[target=torch.ops.aten.linear.default](args = (%view, %p_fe_cnn_11_weight, %p_fe_cnn_11_bias), kwargs = {})JI
+pkg.torch.onnx.name_scopes+['', 'fe', 'fe.cnn', 'fe.cnn.11', 'linear']J˜
+pkg.torch.onnx.stack_traceÿFile "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/linear.py", line 125, in forward
+    return F.linear(input, self.weight, self.bias)
+Ù	
+linearrelu_3node_relu_3"ReluJΩ
+	namespaceØ: __main__.PPOInference/fe: __main__.SnakeFeaturesExtractor/fe.cnn: torch.nn.modules.container.Sequential/fe.cnn.12: torch.nn.modules.activation.ReLU/relu_3: aten.relu.defaultJ¡
+pkg.torch.onnx.class_hierarchyû['__main__.PPOInference', '__main__.SnakeFeaturesExtractor', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.activation.ReLU', 'aten.relu.default']JÖ
+pkg.torch.onnx.fx_nodek%relu_3 : [num_users=1] = call_function[target=torch.ops.aten.relu.default](args = (%linear,), kwargs = {})JI
+pkg.torch.onnx.name_scopes+['', 'fe', 'fe.cnn', 'fe.cnn.12', 'relu_3']J˜
+pkg.torch.onnx.stack_traceÿFile "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 31, in forward
+    return self.cnn(x)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/activation.py", line 135, in forward
+    return F.relu(input, inplace=self.inplace)
+…
+relu_3
+action_net.weight
+action_net.biaslinear_1node_linear_1"Gemm*
+beta  Ä?†*
+transB†*
+alpha  Ä?†*
+transA †Jm
+	namespace`: __main__.PPOInference/action_net: torch.nn.modules.linear.Linear/linear_1: aten.linear.defaultJt
+pkg.torch.onnx.class_hierarchyR['__main__.PPOInference', 'torch.nn.modules.linear.Linear', 'aten.linear.default']J≥
+pkg.torch.onnx.fx_nodeò%linear_1 : [num_users=1] = call_function[target=torch.ops.aten.linear.default](args = (%relu_3, %p_action_net_weight, %p_action_net_bias), kwargs = {})J<
+pkg.torch.onnx.name_scopes['', 'action_net', 'linear_1']J„
+pkg.torch.onnx.stack_traceƒFile "/Users/nikitaromanenko/hackaton_sber/battlesnake-public/train_ppo.py", line 62, in forward
+    return self.action_net(self.mlp_pi(self.fe(x)))
+  File "/Users/nikitaromanenko/Library/Python/3.9/lib/python/site-packages/torch/nn/modules/linear.py", line 125, in forward
+    return F.linear(input, self.weight, self.bias)
+main_graph*Z Bfe.cnn.0.weightj
+locationmodel.onnx.dataj
+offset6656j
+length6912p*ñ Bfe.cnn.0.biasJÄ§‡v=‹<j> k>?‡>Jì°æ†>,É>Ämûæ&hÖ>›,>3v7æ‹“S>Ñ˘Æ>÷h‰>‘ôû>	Ç>,4ÿªsÕ>í	>Vt§>òLÑ> 	û>‰Ê¨=…áI>~¡ƒ>vH»>Hˆ>~w>˙ÍÁ=MJ>XZ≈>÷ø*\@ Bfe.cnn.3.weightj
+locationmodel.onnx.dataj
+offset13568j
+length73728p*ñ@Bfe.cnn.3.biasJÄ(H>ùŸ(?J≈à?ûy?•'1ø:ô ?ÆÚ•?Ç‹Y?`iæ‰Hu>í¡F?¯©?¬”µæQ∂Y?Z≈>Ë›=`iºxëc>N2ï?09©?Lº?h"“æø√ì? aﬁ:· *?–¿[?oÎ??¶¨•?¸U æô©G?WKø≥t>¥E
+?êœ?uuå?å’?à+?Œ@Ü?“z-?Îé|?ªmC?f5Ñ>Î~?¬?˙{?“™ñ?<]w?ŒzÌ>¬Ê§?∆Wz?Ù°≤>IF?n¡9?ÚYÛ>ûº"?ü¸x?(Ñ˘=‹™>*‹=∑Àg?:˙u?È^†?»áÌ=Æ‰>*]@@Bfe.cnn.6.weightj
+locationmodel.onnx.dataj
+offset87296j
+length147456p*ñ@Bfe.cnn.6.biasJÄ‹∑"øÇÁGørvøºV»æ†ôøeíA>%ºñ>Vó‡=Äø&æµõ˙æÓV”=-„ª>ÿ¥)=†Ïª;t U>VÃÖΩà›»æ ´âøÏÄ}øJX >C"Z>~P&øïÏeø0¢Kæ]øÆøò'§=£æJHøäˇæ5√>ﬁ÷<>íÈÛæñ◊îæÈøéøˇ¬!øHHﬁ<«Uø)Oøm•°ø>ì€æ¿® >±S?)sæz4Äæ∂ïø“>^|CøÙCø/Qbø∫%éæ?ô>Ü=”ø=ô!øF¨æLësøT@?≤æ•váø∑øc‹ÅøjìøÄ™Úæ◊±≥æ*]ÄÄBfe.cnn.11.weightj
+locationmodel.onnx.dataj
+offset234752j
+length524288p*PÄBfe.cnn.11.biasj
+locationmodel.onnx.dataj
+offset0j
+length512p*XÄBaction_net.weightj
+locationmodel.onnx.dataj
+offset512j
+length2048p*'Baction_net.biasJà$:‹Ëº’rUºípX=*SBval_73j
+locationmodel.onnx.dataj
+offset2560j
+length4096p*)	Bunsqueeze_6J              *Bval_76J    *	Bge_1J              *fBconvert_element_type_defaultJ@  A  @A  @A  A  @A  ÄA  ÄA  @A  @A  ÄA  ÄA  @A  A  @A  @A  A*Bval_244J              *Bval_22J        *Bval_24J       *Bval_85J       *Bval_110J       Zô
+x
+
+
+
+
+"=
+/pkg.torch.export.graph_signature.InputSpec.kind
+USER_INPUT"=
+5pkg.torch.export.graph_signature.InputSpec.persistentNoneb[
+linear_1
+
+
+"?
+0pkg.torch.export.graph_signature.OutputSpec.kindUSER_OUTPUTj)
+fe.cnn.0.weight
+
+ 
+
+
+j
+fe.cnn.0.bias
+
+
+ j)
+fe.cnn.3.weight
+
+@
+ 
+
+j
+fe.cnn.3.bias
+
+
+@j)
+fe.cnn.6.weight
+
+@
+@
+
+j
+fe.cnn.6.bias
+
+
+@j⁄
+fe.cnn.11.weight
+
+
+Ä
+Ä"<
+/pkg.torch.export.graph_signature.InputSpec.kind	PARAMETER"=
+5pkg.torch.export.graph_signature.InputSpec.persistentNone"7
+!pkg.torch.onnx.original_node_namep_fe_cnn_11_weightj—
+fe.cnn.11.bias
+	
+Ä"<
+/pkg.torch.export.graph_signature.InputSpec.kind	PARAMETER"=
+5pkg.torch.export.graph_signature.InputSpec.persistentNone"5
+!pkg.torch.onnx.original_node_namep_fe_cnn_11_biasj€
+action_net.weight
+	
+
+Ä"<
+/pkg.torch.export.graph_signature.InputSpec.kind	PARAMETER"=
+5pkg.torch.export.graph_signature.InputSpec.persistentNone"8
+!pkg.torch.onnx.original_node_namep_action_net_weightj“
+action_net.bias
+
+
+"<
+/pkg.torch.export.graph_signature.InputSpec.kind	PARAMETER"=
+5pkg.torch.export.graph_signature.InputSpec.persistentNone"6
+!pkg.torch.onnx.original_node_namep_action_net_biasj†
+val_73
+
+
+
+
+
+"˘
+$pkg.onnxscript.optimizer.folded_from–['add', 'add_3', 'arange', 'arange_1', 'arange_2', 'arange_3', 'div', 'div_2', 'minimum', 'minimum_1', 'mul', 'mul_2', 'scalar_tensor', 'scalar_tensor_1', 'unsqueeze', 'unsqueeze_1', 'unsqueeze_2', 'unsqueeze_3', 'val_20', 'val_21', 'val_22', 'val_23', 'val_24', 'val_25', 'val_26', 'val_27', 'val_28', 'val_29', 'val_30', 'val_31', 'val_32', 'val_33', 'val_34', 'val_35', 'val_36', 'val_37', 'val_38', 'val_46', 'val_47', 'val_48', 'val_49', 'val_50', 'val_51', 'val_52', 'val_53', 'val_54', 'val_55', 'val_56', 'val_57', 'val_58', 'val_67', 'val_68', 'val_69', 'val_70', 'val_71', 'val_72']j«
+unsqueeze_6
+	
+
+
+
+"ü
+$pkg.onnxscript.optimizer.folded_fromˆ['add_1', 'add_2', 'arange', 'arange_1', 'div', 'div_1', 'ge', 'mul', 'mul_1', 'sub', 'sub_1', 'unsqueeze_4', 'unsqueeze_5', 'val_20', 'val_21', 'val_22', 'val_23', 'val_24', 'val_25', 'val_26', 'val_27', 'val_28', 'val_29', 'val_30', 'val_31', 'val_32', 'val_33', 'val_34', 'val_35', 'val_36', 'val_37', 'val_39', 'val_40', 'val_41', 'val_42', 'val_43', 'val_44', 'val_45']jD
+val_76
+ "2
+$pkg.onnxscript.optimizer.folded_from
+['val_75']j´
+ge_1
+	
+
+"í
+$pkg.onnxscript.optimizer.folded_fromÈ['add_4', 'add_5', 'arange_2', 'arange_3', 'div_2', 'div_3', 'mul_2', 'mul_3', 'sub_2', 'sub_3', 'unsqueeze_8', 'val_20', 'val_22', 'val_24', 'val_26', 'val_37', 'val_46', 'val_47', 'val_48', 'val_49', 'val_50', 'val_51', 'val_52', 'val_53', 'val_54', 'val_55', 'val_56', 'val_57', 'val_58', 'val_59', 'val_60', 'val_61', 'val_62', 'val_63', 'val_64', 'val_65']jò
+convert_element_type_default
+
+
+"Á
+$pkg.onnxscript.optimizer.folded_fromæ['add_1', 'add_2', 'add_4', 'add_5', 'arange', 'arange_2', 'div', 'div_1', 'div_2', 'div_3', 'mul', 'mul_1', 'mul_2', 'mul_3', 'mul_4', 'sub', 'sub_1', 'sub_2', 'sub_3', 'unsqueeze_7', 'val_20', 'val_21', 'val_22', 'val_23', 'val_24', 'val_25', 'val_26', 'val_27', 'val_28', 'val_29', 'val_30', 'val_31', 'val_32', 'val_33', 'val_37', 'val_39', 'val_40', 'val_41', 'val_42', 'val_43', 'val_44', 'val_45', 'val_46', 'val_47', 'val_48', 'val_49', 'val_50', 'val_51', 'val_52', 'val_53', 'val_54', 'val_55', 'val_59', 'val_60', 'val_61', 'val_62', 'val_63', 'val_64', 'val_65']jU
+val_244
+
+
+">
+$pkg.onnxscript.optimizer.folded_from['val_242', 'val_243']j
+val_22
+ j
+val_24
+ j
+val_85
+ j
+val_110
+ j!
+getitem
+
+
+ 
+
+j
+relu
+
+
+ 
+
+j#
+	getitem_3
+
+
+@
+
+j 
+relu_1
+
+
+@
+
+j#
+	getitem_6
+
+
+@
+
+j 
+relu_2
+
+
+@
+
+j 
+val_66
+
+
+
+
+@j(
+val_74
+
+
+
+
+
+
+@j'
+index
+
+
+@
+
+
+
+j-
+masked_fill
+
+
+@
+
+
+
+j/
+masked_fill_1
+
+
+@
+
+
+
+j$
+select
+
+
+@
+
+
+j"
+select_1
+
+
+@
+
+j"
+select_3
+
+
+@
+
+j
+add_6
+
+
+@
+
+j"
+select_5
+
+
+@
+
+j
+add_7
+
+
+@
+
+j"
+select_7
+
+
+@
+
+j
+add_8
+
+
+@
+
+j&
+select_8
+
+
+@
+
+
+j"
+select_9
+
+
+@
+
+j
+add_9
+
+
+@
+
+j#
+	select_11
+
+
+@
+
+j 
+add_10
+
+
+@
+
+j#
+	select_13
+
+
+@
+
+j 
+add_11
+
+
+@
+
+j#
+	select_15
+
+
+@
+
+j 
+add_12
+
+
+@
+
+j'
+	select_16
+
+
+@
+
+
+j#
+	select_17
+
+
+@
+
+j 
+add_13
+
+
+@
+
+j#
+	select_19
+
+
+@
+
+j 
+add_14
+
+
+@
+
+j#
+	select_21
+
+
+@
+
+j 
+add_15
+
+
+@
+
+j#
+	select_23
+
+
+@
+
+j 
+add_16
+
+
+@
+
+j'
+	select_24
+
+
+@
+
+
+j#
+	select_25
+
+
+@
+
+j 
+add_17
+
+
+@
+
+j#
+	select_27
+
+
+@
+
+j 
+add_18
+
+
+@
+
+j#
+	select_29
+
+
+@
+
+j 
+add_19
+
+
+@
+
+j#
+	select_31
+
+
+@
+
+j 
+add_20
+
+
+@
+
+j
+div_4
+
+
+@
+
+j
+view
+	
+
+Äj
+linear
+	
+
+Äj
+relu_3
+	
+
+ÄÇ•
+0pkg.torch.export.ExportedProgram.graph_signature
+# inputs
+p_fe_cnn_0_weight: PARAMETER target='fe.cnn.0.weight'
+p_fe_cnn_0_bias: PARAMETER target='fe.cnn.0.bias'
+p_fe_cnn_1_weight: PARAMETER target='fe.cnn.1.weight'
+p_fe_cnn_1_bias: PARAMETER target='fe.cnn.1.bias'
+p_fe_cnn_3_weight: PARAMETER target='fe.cnn.3.weight'
+p_fe_cnn_3_bias: PARAMETER target='fe.cnn.3.bias'
+p_fe_cnn_4_weight: PARAMETER target='fe.cnn.4.weight'
+p_fe_cnn_4_bias: PARAMETER target='fe.cnn.4.bias'
+p_fe_cnn_6_weight: PARAMETER target='fe.cnn.6.weight'
+p_fe_cnn_6_bias: PARAMETER target='fe.cnn.6.bias'
+p_fe_cnn_7_weight: PARAMETER target='fe.cnn.7.weight'
+p_fe_cnn_7_bias: PARAMETER target='fe.cnn.7.bias'
+p_fe_cnn_11_weight: PARAMETER target='fe.cnn.11.weight'
+p_fe_cnn_11_bias: PARAMETER target='fe.cnn.11.bias'
+p_action_net_weight: PARAMETER target='action_net.weight'
+p_action_net_bias: PARAMETER target='action_net.bias'
+b_fe_cnn_1_running_mean: BUFFER target='fe.cnn.1.running_mean' persistent=True
+b_fe_cnn_1_running_var: BUFFER target='fe.cnn.1.running_var' persistent=True
+b_fe_cnn_1_num_batches_tracked: BUFFER target='fe.cnn.1.num_batches_tracked' persistent=True
+b_fe_cnn_4_running_mean: BUFFER target='fe.cnn.4.running_mean' persistent=True
+b_fe_cnn_4_running_var: BUFFER target='fe.cnn.4.running_var' persistent=True
+b_fe_cnn_4_num_batches_tracked: BUFFER target='fe.cnn.4.num_batches_tracked' persistent=True
+b_fe_cnn_7_running_mean: BUFFER target='fe.cnn.7.running_mean' persistent=True
+b_fe_cnn_7_running_var: BUFFER target='fe.cnn.7.running_var' persistent=True
+b_fe_cnn_7_num_batches_tracked: BUFFER target='fe.cnn.7.num_batches_tracked' persistent=True
+x: USER_INPUT
+
+# outputs
+linear_1: USER_OUTPUT
+Ç8
+2pkg.torch.export.ExportedProgram.range_constraints{}B
+ 

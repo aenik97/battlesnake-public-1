@@ -13,8 +13,18 @@ Board coordinates: ``(0, 0)`` is the bottom-left corner.
 Game-state schema reference: https://docs.battlesnake.com/api
 """
 
+import os
 from collections import deque
 from typing import Dict, List, Optional, Set, Tuple
+
+import numpy as np
+
+_ONNX_PATH = os.path.join(os.path.dirname(__file__), "model.onnx")
+try:
+    import onnxruntime as _ort
+    _SESSION = _ort.InferenceSession(_ONNX_PATH) if os.path.exists(_ONNX_PATH) else None
+except Exception:
+    _SESSION = None
 
 Point = Tuple[int, int]
 
@@ -318,12 +328,72 @@ _MODEL: Dict = {
 }
 
 
-def choose_move_model(game_state: Dict) -> Optional[str]:
-    """Score each legal move with the trained model; return the best.
+_MOVE_NAMES = ["up", "down", "left", "right"]
+_DIRS_LIST = [(0, 1), (0, -1), (-1, 0), (1, 0)]
 
-    Returns ``None`` (so the caller falls back to the heuristic) if the model
-    isn't available or the snake is trapped with no legal move.
+
+def _encode_board(game_state: Dict) -> np.ndarray:
+    """Encode game state as (1, 6, 11, 11) float32 tensor for CNN inference."""
+    board = game_state["board"]
+    you = game_state["you"]
+    w, h = board["width"], board["height"]
+    my_id = you["id"]
+    my_len = you["length"]
+
+    tensor = np.zeros((1, 6, h, w), dtype=np.float32)
+
+    hx, hy = you["head"]["x"], you["head"]["y"]
+    tensor[0, 0, hy, hx] = 1.0
+
+    for seg in you["body"][1:]:
+        tensor[0, 1, seg["y"], seg["x"]] = 1.0
+
+    for snake in board["snakes"]:
+        if snake["id"] == my_id:
+            continue
+        ex, ey = snake["head"]["x"], snake["head"]["y"]
+        tensor[0, 2, ey, ex] = 1.0
+        for seg in snake["body"][1:]:
+            tensor[0, 3, seg["y"], seg["x"]] = 1.0
+        if snake["length"] >= my_len:
+            for dx, dy in _DIRS_LIST:
+                nx, ny = ex + dx, ey + dy
+                if 0 <= nx < w and 0 <= ny < h:
+                    tensor[0, 5, ny, nx] = 1.0
+
+    for f in board["food"]:
+        tensor[0, 4, f["y"], f["x"]] = 1.0
+
+    return tensor
+
+
+def choose_move_model(game_state: Dict) -> Optional[str]:
+    """Score moves with CNN; return the best legal move.
+
+    Falls back to None (caller uses heuristic) if model unavailable or no legal moves.
     """
+    if _SESSION is None:
+        return _choose_move_linear(game_state)
+
+    legal = _legal_moves(game_state)
+    if not legal:
+        return None
+
+    tensor = _encode_board(game_state)
+    input_name = _SESSION.get_inputs()[0].name
+    logits = _SESSION.run(None, {input_name: tensor})[0][0]
+
+    best_move, best_score = None, float("-inf")
+    for move in legal:
+        idx = _MOVE_NAMES.index(move)
+        if logits[idx] > best_score:
+            best_score = logits[idx]
+            best_move = move
+    return best_move
+
+
+def _choose_move_linear(game_state: Dict) -> Optional[str]:
+    """Original linear model scoring (kept as inner fallback)."""
     legal = _legal_moves(game_state)
     if not legal:
         return None
