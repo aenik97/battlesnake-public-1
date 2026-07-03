@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+work/
+work/pycache/
+.venv/
+venv/
+.env
+.DS_Store
+
+# Local Battlesnake CLI output
+logs/
+
+# Local replay downloads
+data/*.json
+data/games/*.json

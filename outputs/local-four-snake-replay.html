@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Battlesnake Replay</title>
+  <style>
+    :root {
+      --bg: #101114;
+      --panel: #1a1d22;
+      --panel-2: #22262d;
+      --line: #333945;
+      --text: #f4f6fa;
+      --muted: #aab2c0;
+      --food: #f2c94c;
+      --hazard: #7f1d1d;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    main {
+      width: min(1280px, calc(100vw - 28px));
+      margin: 0 auto;
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: minmax(320px, 780px) minmax(300px, 1fr);
+      gap: 18px;
+      align-items: center;
+      padding: 18px 0;
+    }
+    .board {
+      display: grid;
+      grid-template-columns: repeat(var(--board-w), 1fr);
+      aspect-ratio: var(--board-w) / var(--board-h);
+      width: 100%;
+      border: 1px solid var(--line);
+      background: #15171b;
+    }
+    .cell {
+      position: relative;
+      border-right: 1px solid rgba(255,255,255,.055);
+      border-bottom: 1px solid rgba(255,255,255,.055);
+      min-width: 0;
+    }
+    .cell::after {
+      content: "";
+      position: absolute;
+      inset: 18%;
+      border-radius: 4px;
+      background: transparent;
+    }
+    .food::after {
+      inset: 26%;
+      border-radius: 50%;
+      background: var(--food);
+      box-shadow: 0 0 14px rgba(242,201,76,.48);
+    }
+    .hazard { background: rgba(127,29,29,.48); }
+    .body::after { background: var(--snake-color); opacity: .62; }
+    .head::after {
+      background: var(--snake-color);
+      inset: 9%;
+      opacity: 1;
+      border: 2px solid rgba(255,255,255,.82);
+      box-shadow: 0 0 18px rgba(255,255,255,.18);
+    }
+    aside {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      padding: 16px;
+      max-height: calc(100vh - 36px);
+      overflow: auto;
+    }
+    h1 {
+      margin: 0 0 6px;
+      font-size: 22px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+    .meta {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+      margin-bottom: 14px;
+      overflow-wrap: anywhere;
+    }
+    .controls {
+      display: grid;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    button {
+      min-height: 40px;
+      border: 1px solid #414956;
+      background: var(--panel-2);
+      color: var(--text);
+      font-weight: 700;
+      cursor: pointer;
+    }
+    input[type="range"] { width: 100%; }
+    .row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .snakes {
+      display: grid;
+      gap: 6px;
+    }
+    .snake {
+      display: grid;
+      grid-template-columns: 12px minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      padding: 9px 0;
+      border-top: 1px solid var(--line);
+      font-size: 14px;
+    }
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--snake-color);
+    }
+    .name {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .detail {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 2px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .move {
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+    @media (max-width: 860px) {
+      main { grid-template-columns: 1fr; align-items: start; }
+      aside { max-height: none; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section id="board" class="board" aria-label="Battlesnake replay board"></section>
+    <aside>
+      <h1 id="title">Battlesnake Replay</h1>
+      <div id="meta" class="meta"></div>
+      <div class="controls">
+        <button id="play">Play</button>
+        <input id="turn" type="range" min="0" max="0" value="0">
+        <div class="row"><span id="turnLabel">turn 0</span><span id="aliveLabel">alive 0</span></div>
+        <label class="row">Speed <input id="speed" type="range" min="60" max="900" step="20" value="180"></label>
+      </div>
+      <div id="snakes" class="snakes"></div>
+    </aside>
+  </main>
+  <script>
+    const replay = {"title":"local four-snake scrimmage","source":"simulate-four","gameUrl":"","width":11,"height":11,"frames":[{"turn":0,"food":[{"x":0,"y":4},{"x":1,"y":8},{"x":3,"y":5},{"x":5,"y":5},{"x":7,"y":5},{"x":8,"y":2}],"hazards":[],"moves":{},"snakes":[{"id":"alpha","name":"alpha","author":"","color":"#65d36e","health":100,"length":3,"latency":"","death":null,"body":[{"x":1,"y":1},{"x":1,"y":0},{"x":0,"y":0}]},{"id":"bravo","name":"bravo","author":"","color":"#f2c94c","health":100,"length":3,"latency":"","death":null,"body":[{"x":9,"y":9},{"x":9,"y":10},{"x":10,"y":10}]},{"id":"charlie","name":"charlie","author":"","color":"#65d36e","health":100,"length":3,"latency":"","death":null,"body":[{"x":1,"y":9},{"x":0,"y":9},{"x":0,"y":10}]},{"id":"delta","name":"delta","author":"","color":"#29b6f6","health":100,"length":3,"latency":"","death":null,"body":[{"x":9,"y":1},{"x":10,"y":1},{"x":10,"y":0}]}]},{"turn":1,"food":[{"x":0,"y":4},{"x":1,"y":8},{"x":3,"y":5},{"x":5,"y":5},{"x":7,"y":5},{"x":8,"y":2}],"hazards":[],"moves":{"alpha":"up","bravo":"down","charlie":"right","delta":"up"},"snakes":[{"id":"alpha","name":"alpha","author":"","color":"#65d36e","health":99,"length":3,"latency":"","death":null,"body":[{"x":1,"y":2},{"x":1,"y":1},{"x":1,"y":0}]},{"id":"bravo","name":"bravo","author":"","color":"#f2c94c","health":99,"length":3,"latency":"","death":null,"body":[{"x":9,"y":8},{"x":9,"y":9},{"x":9,"y":10}]},{"id":"charlie","name":"charlie","author":"","color":"#65d36e","health":99,"length":3,"latency":"","death":null,"body":[{"x":2,"y":9},{"x":1,"y":9},{"x":0,"y":9}]},{"id":"delta","name":"delta","author":"","color":"#29b6f6","health":99,"length":3,"latency":"","death":null,"body":[{"x":9,"y":2},{"x":9,"y":1},{"x":10,"y":1}]}]},{"turn":2,"food":[{"x":0,"y":4},{"x":1,"y":8},{"x":3,"y":5},{"x":5,"y":5},{"x":7,"y":5},{"x":8,"y":2}],"hazards":[],"moves":{"alpha":"up","bravo":"left","charlie":"down","delta":"up"},"snakes":[{"id":"alpha","name":"alpha","author":"","color":"#65d36e","health":98,"length":3,"latency":"","death":null,"body":[{"x":1,"y":3},{"x":1,"y":2},{"x":1,"y":1}]},{"id":"bravo","name":"bravo","author":"","color":"#f2c94c","health":98,"length":3,"latency":"","death":null,"body":[{"x":8,"y":8},{"x":9,"y":8},{"x":9,"y":9}]},{"id":"charlie","name":"charlie","author":"","color":"#65d36e","health":98,"length":3,"latency":"","death":null,"body":[{"x":2,"y":8},{"x":2,"y":9},{"x":1,"y":9}]},{"id":"delta","name":"delta","author":"","color":"#29b6f6","health":98,"length":3,"latency":"","death":null,"body":[{"x":9,"y":3},{"x":9,"y":2},{"x":9,"y":1}]}]},{"turn":3,"food":[{"x":0,"y":4},{"x":1,"y":8},{"x":3,"y":5},{"x":5,"y":5},{"x":7,"y":5},{"x":8,"y":2}],"hazards":[],"moves":{"alpha":"up","bravo":"down","charlie":"down","delta":"left"},"snakes":[{"id":"alpha","name":"alpha","author":"","color":"#65d36e","health":97,"length":3,"latency":"","death":null,"body":[{"x":1,"y":4},{"x":1,"y":3},{"x":1,"y":2}]},{"id":"bravo","name":"bravo","author":"","color":"#f2c94c","health":97,"length":3,"latency":"","death":null,"body":[{"x":8,"y":7},{"x":8,"y":8},{"x":9,"y":8}]},{"id":"charlie","name":"charlie","author":"","color":"#65d36e","health":97,"length":3,"latency":"","death":null,"body":[{"x":2,"y":7},{"x":2,"y":8},{"x":2,"y":9}]},{"id":"delta","name":"delta","author":"","color":"#29b6f6","health":97,"length":3,"latency":"","death":null,"body":[{"x":8,"y":3},{"x":9,"y":3},{"x":9,"y":2}]}]},{"turn":4,"food":[{"x":0,"y":4},{"x":1,"y":8},{"x":3,"y":5},{"x":5,"y":5},{"x":7,"y":5},{"x":8,"y":2}],"hazards":[],"moves":{"alpha":"up","bravo":"left","charlie":"right","delta":"left"},"snakes":[{"id":"alpha","name":"alpha","author":"","color":"#65d36e","health":96,"length":3,"latency":"","death":null,"body":[{"x":1,"y":5},{"x":1,"y":4},{"x":1,"y":3}]},{"id":"bravo","name":"bravo","author":"","color":"#f2c94c","health":96,"length":3,"latency":"","death":null,"body":[{"x":7,"y":7},{"x":8,"y":7},{"x":8,"y":8}]},{"id":"charlie","name":"charlie","author":"","color":"#65d36e","health":96,"length":3,"latency":"","death":null,"body":[{"x":3,"y":7},{"x":2,"y":7},{"x":2,"y":8}]},{"id":"delta","name":"delta","author":"","color":"#29b6f6","health":96,"length":3,"latency":"","death":null,"body":[{"x":7,"y":3},{"x":8,"y":3},{"x":9,"y":3}]}]},{"turn":5,"food":[{"x":0,"y":4},{"x":1,"y":8},{"x":3,"y":5},{"x":5,"y":5},{"x":7,"y":5},{"x":8,"y":2}],"hazards":[],"moves":{"alpha":"right","bravo":"down","charlie":"up","delta":"up"},"snakes":[{"id":"alpha","name":"alpha","author":"","color":"#65d36e","health":95,"length":3,"latency":"","death":null,"body":[{"x":2,"y":5},{"x":1,"y":5},{"x":1,"y":4}]},{"id":"bravo","name":"bravo","author":"","color":"#f2c94c","health":95,"length":3,"latency":"","death":null,"body":[{"x":7,"y":6},{"x":7,"y":7},{"x":8,"y":7}]},{"id":"charlie","name":"charlie","author":"","color":"#65d36e","health":95,"length":3,"latency":"","death":null,"body":[{"x":3,"y":8},{"x":3,"y":7},{"x":2,"y":7}]},{"id":"delta","name":"delta","author":"","color":"#29b6f6","health":95,"length":3,"latency":"","death":null,"body":[{"x":7,"y":4},{"x":7,"y":3},{"x":8,"y":3}]}]},{"turn":6,"food":[{"x":0,"y":4},{"x":1,"y":8},{"x":4,"y":0},{"x":5,"y":5},{"x":7,"y":5},{"x":8,"y":2}],"hazards":[],"moves":{"alpha":"right","bravo":"right","charlie":"left","delta":"left"},"snakes":[{"id":"alpha","name":"alpha","author":"","color":"#65d36e","health":100,"length":4,"latency":"","death":null,"body":[{"x":3,"y":5},{"x":2,"y":5},{"x":1,"y":5},{"x":1,"y":4}]},{"id":"bravo","name":"bravo","author":"","color":"#f2c94c","health":94,"length":3,"latency":"","death":null,"body":[{"x":8,"y":6},{"x":7,"y":6},{"x":7,"y":7}]},{"id":"charlie","name":"charlie","author":"","color":"#65d36e","health":94,"length":3,"latency":"","death":null,"body":[{"x":2,"y":8},{"x":3,"y":8},{"x":3,"y":7}]},{"id":"delta","name":"delta","author":"","color":"#29b6f6","health":94,"length":3,"latency":"","death":null,"body":[{"x":6,"y":4},{"x":7,"y":4},{"x":7,"y":3}]}]},{"turn":7,"food":[{"x":0,"y":4},{"x":1,"y":8},{"x":4,"y":0},{"x":5,"y":5},{"x":7,"y":5},{"x":8,"y":2}],"hazards":[],"moves":{"alpha":"right","bravo":"down","charlie":"up","delta":"left"},"snakes":[{"id":"alpha","name":"alpha","author":"","color":"#65d36e","health":99,"length":4,"latency":"","death":null,"body":[{"x":4,"y":5},{"x":3,"y":5},{"x":2,"y":5},{"x":1,"y":5}]},{"id":"bravo","name":"bravo","author":"","color":"#f2c94c","health":93,"length":3,"latency":"","death":null,"body":[{"x":8,"y":5},{"x":8,"y":6},{"x":7,"y":6}]},{"id":"charlie","name":"charlie","author":"","color":"#65d36e","health":93,"length":3,"latency":"","death":null,"body":[{"x":2,"y":9},{"x":2,"y":8},{"x":3,"y":8}]},{"id":"delta","name":"delta","author":"","color":"#29b6f6","health":93,"length":3,"latency":"","death":null,"body":[{"x":5,"y":4},{"x":6,"y":4},{"x":7,"y":4}]}]},{"turn":8,"food":[{"x":0,"y":4},{"x":1,"y":8},{"x":4,"y":0},{"x":5,"y":5},{"x":7,"y":5},{"x":8,"y":2}],"hazards":[],"moves":{"alpha":"up","bravo":"down","charlie":"right","delta":"down"},"snakes":[{"id":"alpha","name":"alpha","author":"","color":"#65d36e","health":98,"length":4,"latency":"","death":null,"body":[{"x":4,"y":6},{"x":4,"y":5},{"x":3,"y":5},{"x":2,"y":5}]},{"id":"bravo","name":"bravo","author":"","color":"#f2c94c","health":92,"length":3,"latency":"","death":null,"body":[{"x":8,"y":4},{"x":8,"y":5},{"x":8,"y":6}]},{"id":"charlie","name":"charlie","author":"","color":"#65d36e","health":92,"length":3,"latency":"","death":null,"body":[{"x":3,"y":9},{"x":2,"y":9},{"x":2,"y":8}]},{"id":"delta","name":"delta","author":"","color":"#29b6f6","health":92,"length":3,"latency":"","death":null,"body":[{"x":5,"y":3},{"x":5,"y":4},{"x":6,"y":4}]}]},{"turn":9,"food":[{"x":0,"y":4},{"x":1,"y":8},{"x":4,"y":0},{"x":5,"y":5},{"x":7,"y":5},{"x":8,"y":2}],"hazards":[],"moves":{"alpha":"right","bravo":"left","charlie":"right","delta":"down"},"snakes":[{"id":"alpha","name":"alpha","author":"","color":"#65d36e","health":97,"length":4,"latency":"","death":null,"body":[{"x":5,"y":6},{"x":4,"y":6},{"x":4,"y":5},{"x":3,"y":5}]},{"id":"bravo","name":"bravo","author":"","color":"#f2c94c","health":91,"length":3,"latency":"","death":null,"body":[{"x":7,"y":4},{"x":8,"y":4},{"x":8,"y":5}]},{"id":"charlie","name":"charlie","author":"","color":"#65d36e","health":91,"length":3,"latency":"","death":null,"body":[{"x":4,"y":9},{"x":3,"y":9},{"x":2,"y":9}]},{"id":"delta","name":"delta","author":"","color":"#29b6f6","health":91,"length":3,"latency":"","death":null,"body":[{"x":5,"y":2},{"x":5,"y":3},{"x":5,"y":4}]}]},{"turn":10,"food":[{"x":0,"y":4},{"x":1,"y":8},{"x":4,"y":0},{"x":5,"y":5},{"x":7,"y":5},{"x":8,"y":2}],"hazards":[],"moves":{"alpha":"right","bravo":"down","charlie":"up","delta":"down"},"snakes":[{"id":"alpha","name":"alpha","author":"","color":"#65d36e","health":96,"length":4,"latency":"","death":null,"body":[{"x":6,"y":6},{"x":5,"y":6},{"x":4,"y":6},{"x":4,"y":5}]},{"id":"bravo","name":"bravo","author":"","color":"#f2c94c","health":90,"length":3,"latency":"","death":null,"body":[{"x":7,"y":3},{"x":7,"y":4},{"x":8,"y":4}]},{"id":"charlie","name":"charlie","author":"","color":"#65d36e","health":90,"length":3,"latency":"","death":null,"body":[{"x":4,"y":10},{"x":4,"y":9},{"x":3,"y":9}]},{"id":"delta","name":"delta","author":"","color":"#29b6f6","health":90,"length":3,"latency":"","death":null,"body":[{"x":5,"y":1},{"x":5,"y":2},{"x":5,"y":3}]}]},{"turn":11,"food":[{"x":0,"y":4},{"x":1,"y":8},{"x":4,"y":0},{"x":5,"y":5},{"x":7,"y":5},{"x":8,"y":2}],"hazards":[],"moves":{"alpha":"down","bravo":"down","charlie":"left","delta":"left"},"snakes":[{"id":"alpha","name":"alpha","author":"","color":"#65d36e","health":95,"length":4,"latency":"","death":null,"body":[{"x":6,"y":5},{"x":6,"y":6},{"x":5,"y":6},{"x":4,"y":6}]},{"id":"bravo","name":"bravo","author":"","color":"#f2c94c","health":89,"length":3,"latency":"","death":null,"body":[{"x":7,"y":2},{"x":7,"y":3},{"x":7,"y":4}]},{"id":"charlie","name":"charlie","author":"","color":"#65d36e","health":89,"length":3,"latency":"","death":null,"body":[{"x":3,"y":10},{"x":4,"y":10},{"x":4,"y":9}]},{"id":"delta","name":"delta","author":"","color":"#29b6f6","health":89,"length":3,"latency":"","death":null,"body":[{"x":4,"y":1},{"x":5,"y":1},{"x":5,"y":2}]}]},{"turn":12,"food":[{"x":0,"y":4},{"x":1,"y":8},{"x":4,"y":0},{"x":5,"y":5},{"x":8,"y":8},{"x":10,"y":4}],"hazards":[],"moves":{"alpha":"right","bravo":"right","charlie":"down","delta":"left"},"snakes":[{"id":"alpha","name":"alpha","author":"","color":"#65d36e","health":100,"length":5,"latency":"","death":null,"body":[{"x":7,"y":5},{"x":6,"y":5},{"x":6,"y":6},{"x":5,"y":6},{"x":4,"y":6}]},{"id":"bravo","name":"bravo","author":"","color":"#f2c94c","health":100,"length":4,"latency":"","death":null,"body":[{"x":8,"y":2},{"x":7,"y":2},{"x":7,"y":3},{"x":7,"y":4}]},{"id":"charlie","name":"charlie","author":"","color":"#65d36e","health":88,"length":3,"latency":"","death":null,"body":[{"x":3,"y":9},{"x":3,"y":10},{"x":4,"y":10}]},{"id":"delta","name":"delta","author":"","color":"#29b6f6","health":88,"length":3,"latency":"","death":null,"body":[{"x":3,"y":1},{"x":4,"y":1},{"x":5,"y":1}]}]},{"turn":13,"food":[{"x":0,"y":4},{"x":1,"y":8},{"x":4,"y":0},{"x":5,"y":5},{"x":8,"y":8},{"x":10,"y":4}],"hazards":[],"moves":{"alpha":"right","bravo":"up","charlie":"down","delta":"up"},"snakes":[{"id":"alpha","name":"alpha","author":"","color":"#65d36e","health":99,"length":5,"latency":"","death":null,"body":[{"x":8,"y":5},{"x":7,"y":5},{"x":6,"y":5},{"x":6,"y":6},{"x":5,"y":6}]},{"id":"bravo","name":"bravo","author":"","color":"#f2c94c","health":99,"length":4,"latency":"","death":null,"body":[{"x":8,"y":3},{"x":8,"y":2},{"x":7,"y":2},{"x":7,"y":3}]},{"id":"charlie","name":"charlie","author":"","color":"#65d36e","health":87,"length":3,"latency":"","death":null,"body":[{"x":3,"y":8},{"x":3,"y":9},{"x":3,"y":10}]},{"id":"delta","name":"delta","author":"","color":"#29b6f6","health":87,"length":3,"latency":"","death":null,"body":[{"x":3,"y":2},{"x":3,"y":1},{"x":4,"y":1}]}]},{"turn":14,"food":[{"x":0,"y":4},{"x":1,"y":8},{"x":4,"y":0},{"x":5,"y":5},{"x":8,"y":8},{"x":10,"y":4}],"hazards":[],"moves":{"alpha":"up","bravo":"right","charlie":"left","delta":"right"},"snakes":[{"id":"alpha","name":"alpha","author":"","color":"#65d36e","health":98,"length":5,"latency":"","death":null,"body":[{"x":8,"y":6},{"x":8,"y":5},{"x":7,"y":5},{"x":6,"y":5},{"x":6,"y":6}]},{"id":"bravo","name":"bravo","author":"","color":"#f2c94c","health":98,"length":4,"latency":"","death":null,"body":[{"x":9,"y":3},{"x":8,"y":3},{"x":8,"y":2},{"x":7,"y":2}]},{"id":"charlie","name":"charlie","author":"","color":"#65d36e","health":86,"length":3,"latency":"","death":null,"body":[{"x":2,"y":8},{"x":3,"y":8},{"x":3,"y":9}]},{"id":"delta","name":"delta","author":"","color":"#29b6f6","health":86,"length":3,"latency":"","death":null,"body":[{"x":4,"y":2},{"x":3,"y":2},{"x":3,"y":1}]}]},{"turn":15,"food":[{"x":0,"y":4},{"x":1,"y":8},{"x":4,"y":0},{"x":5,"y":5},{"x":8,"y":8},{"x":10,"y":4}],"hazards":[],"moves":{"alpha":"up","bravo":"up","charlie":"down","delta":"up"},"snakes":[{"id":"alpha","name":"alpha","author":"","color":"#65d36e","health":97,"length":5,"latency":"","death":null,"body":[{"x":8,"y":7},{"x":8,"y":6},{"x":8,"y":5},{"x":7,"y":5},{"x":6,"y":5}]},{"id":"bravo","name":"bravo","author":"","color":"#f2c94c","health":97,"length":4,"latency":"","death":null,"body":[{"x":9,"y":4},{"x":9,"y":3},{"x":8,"y":3},{"x":8,"y":2}]},{"id":"charlie","name":"charlie","author":"","color":"#65d36e","health":85,"length":3,"latency":"","death":null,"body":[{"x":2,"y":7},{"x":2,"y":8},{"x":3,"y":8}]},{"id":"delta","name":"delta","author":"","color":"#29b6f6","health":85,"length":3,"latency":"","death":null,"body":[{"x":4,"y":3},{"x":4,"y":2},{"x":3,"y":2}]}]},{"turn":16,"food":[{"x":0,"y":4},{"x":1,"y":8},{"x":4,"y":0},{"x":5,"y":5},{"x":8,"y":8},{"x":10,"y":4}],"hazards":[],"moves":{"alpha":"left","bravo":"up","charlie":"down","delta":"left"},"snakes":[{"id":"alpha","name":"alpha","author":"","color":"#65d36e","health":96,"length":5,"latency":"","death":null,"body":[{"x":7,"y":7},{"x":8,"y":7},{"x":8,"y":6},{"x":8,"y":5},{"x":7,"y":5}]},{"id":"bravo","name":"bravo","author":"","color":"#f2c94c","health":96,"length":4,"latency":"","death":null,"body":[{"x":9,"y":5},{"x":9,"y":4},{"x":9,"y":3},{"x":8,"y":3}]},{"id":"charlie","name":"charlie","author":"","color":"#65d36e","health":84,"length":3,"latency":"","death":null,"body":[{"x":2,"y":6},{"x":2,"y":7},{"x":2,"y":8}]},{"id":"delta","name":"delta","author":"","color":"#29b6f6","health":84,"length":3,"latency":"","death":null,"body":[{"x":3,"y":3},{"x":4,"y":3},{"x":4,"y":2}]}]},{"turn":17,"food":[{"x":0,"y":4},{"x":1,"y":8},{"x":4,"y":0},{"x":5,"y":5},{"x":8,"y":8},{"x":10,"y":4}],"hazards":[],"moves":{"alpha":"up","bravo":"up","charlie":"down","delta":"down"},"snakes":[{"id":"alpha","name":"alpha","author":"","color":"#65d36e","health":95,"length":5,"latency":"","death":null,"body":[{"x":7,"y":8},{"x":7,"y":7},{"x":8,"y":7},{"x":8,"y":6},{"x":8,"y":5}]},{"id":"bravo","name":"bravo","author":"","color":"#f2c94c","health":95,"length":4,"latency":"","death":null,"body":[{"x":9,"y":6},{"x":9,"y":5},{"x":9,"y":4},{"x":9,"y":3}]},{"id":"charlie","name":"charlie","author":"","color":"#65d36e","health":83,"length":3,"latency":"","death":null,"body":[{"x":2,"y":5},{"x":2,"y":6},{"x":2,"y":7}]},{"id":"delta","name":"delta","author":"","color":"#29b6f6","health":83,"length":3,"latency":"","death":null,"body":[{"x":3,"y":2},{"x":3,"y":3},{"x":4,"y":3}]}]},{"turn":18,"food":[{"x":0,"y":4},{"x":1,"y":8},{"x":4,"y":0},{"x":5,"y":5},{"x":8,"y":8},{"x":10,"y":4}],"hazards":[],"moves":{"alpha":"left","bravo":"up","charlie":"right","delta":"down"},"snakes":[{"id":"alpha","name":"alpha","author":"","color":"#65d36e","health":94,"length":5,"latency":"","death":null,"body":[{"x":6,"y":8},{"x":7,"y":8},{"x":7,"y":7},{"x":8,"y":7},{"x":8,"y":6}]},{"id":"bravo","name":"bravo","author":"","color":"#f2c94c","health":94,"length":4,"latency":"","death":null,"body":[{"x":9,"y":7},{"x":9,"y":6},{"x":9,"y":5},{"x":9,"y":4}]},{"id":"charlie","name":"charlie","author":"","color":"#65d36e","health":82,"length":3,"latency":"","death":null,"body":[{"x":3,"y":5},{"x":2,"y":5},{"x":2,"y":6}]},{"id":"delta","name":"delta","author":"","color":"#29b6f6","health":82,"length":3,"latency":"","death":null,"body":[{"x":3,"y":1},{"x":3,"y":2},{"x":3,"y":3}]}]},{"turn":19,"food":[{"x":0,"y":4},{"x":1,"y":8},{"x":4,"y":0},{"x":5,"y":5},{"x":8,"y":8},{"x":10,"y":4}],"hazards":[],"moves":{"alpha":"left","bravo":"up","charlie":"right","delta":"right"},"snakes":[{"id":"alpha","name":"alpha","author":"","color":"#65d36e","health":93,"length":5,"latency":"","death":null,"body":[{"x":5,"y":8},{"x":6,"y":8},{"x":7,"y":8},{"x":7,"y":7},{"x":8,"y":7}]},{"id":"bravo","name":"bravo","author":"","color":"#f2c94c","health":93,"length":4,"latency":"","death":null,"body":[{"x":9,"y":8},{"x":9,"y":7},{"x":9,"y":6},{"x":9,"y":5}]},{"id":"charlie","name":"charlie","author":"","color":"#65d36e","health":81,"length":3,"latency":"","death":null,"body":[{"x":4,"y":5},{"x":3,"y":5},{"x":2,"y":5}]},{"id":"delta","name":"delta","author":"","color":"#29b6f6","health":81,"length":3,"latency":"","death":null,"body":[{"x":4,"y":1},{"x":3,"y":1},{"x":3,"y":2}]}]},{"turn":20,"food":[{"x":0,"y":4},{"x":1,"y":8},{"x":4,"y":0},{"x":5,"y":5},{"x":8,"y":8},{"x":10,"y":4}],"hazards":[],"moves":{"alpha":"down","bravo":"up","charlie":"up","delta":"right"},"snakes":[{"id":"alpha","name":"alpha","author":"","color":"#65d36e","health":92,"length":5,"latency":"","death":null,"body":[{"x":5,"y":7},{"x":5,"y":8},{"x":6,"y":8},{"x":7,"y":8},{"x":7,"y":7}]},{"id":"bravo","name":"bravo","author":"","color":"#f2c94c","health":92,"length":4,"latency":"","death":null,"body":[{"x":9,"y":9},{"x":9,"y":8},{"x":9,"y":7},{"x":9,"y":6}]},{"id":"charlie","name":"charlie","author":"","color":"#65d36e","health":80,"length":3,"latency":"","death":null,"body":[{"x":4,"y":6},{"x":4,"y":5},{"x":3,"y":5}]},{"id":"delta","name":"delta","author":"","color":"#29b6f6","health":80,"length":3,"latency":"","death":null,"body":[{"x":5,"y":1},{"x":4,"y":1},{"x":3,"y":1}]}]},{"turn":21,"food":[{"x":0,"y":4},{"x":1,"y":8},{"x":4,"y":0},{"x":5,"y":5},{"x":8,"y":8},{"x":10,"y":4}],"hazards":[],"moves":{"alpha":"down","bravo":"left","charlie":"left","delta":"up"},"snakes":[{"id":"alpha","name":"alpha","author":"","color":"#65d36e","health":91,"length":5,"latency":"","death":null,"body":[{"x":5,"y":6},{"x":5,"y":7},{"x":5,"y":8},{"x":6,"y":8},{"x":7,"y":8}]},{"id":"bravo","name":"bravo","author":"","color":"#f2c94c","health":91,"length":4,"latency":"","death":null,"body":[{"x":8,"y":9},{"x":9,"y":9},{"x":9,"y":8},{"x":9,"y":7}]},{"id":"charlie","name":"charlie","author":"","color":"#65d36e","health":79,"length":3,"latency":"","death":null,"body":[{"x":3,"y":6},{"x":4,"y":6},{"x":4,"y":5}]},{"id":"delta","name":"delta","author":"","color":"#29b6f6","health":79,"length":3,"latency":"","death":null,"body":[{"x":5,"y":2},{"x":5,"y":1},{"x":4,"y":1}]}]},{"turn":22,"food":[{"x":0,"y":4},{"x":1,"y":8},{"x":4,"y":0},{"x":8,"y":8},{"x":10,"y":4},{"x":10,"y":8}],"hazards":[],"moves":{"alpha":"down","bravo":"left","charlie":"left","delta":"up"},"snakes":[{"id":"alpha","name":"alpha","author":"","color":"#65d36e","health":100,"length":6,"latency":"","death":null,"body":[{"x":5,"y":5},{"x":5,"y":6},{"x":5,"y":7},{"x":5,"y":8},{"x":6,"y":8},{"x":7,"y":8}]},{"id":"bravo","name":"bravo","author":"","color":"#f2c94c","health":90,"length":4,"latency":"","death":null,"body":[{"x":7,"y":9},{"x":8,"y":9},{"x":9,"y":9},{"x":9,"y":8}]},{"id":"charlie","name":"charlie","author":"","color":"#65d36e","health":78,"length":3,"latency":"","death":null,"body":[{"x":2,"y":6},{"x":3,"y":6},{"x":4,"y":6}]},{"id":"delta","name":"delta","author":"","color":"#29b6f6","health":78,"length":3,"latency":"","death":null,"body":[{"x":5,"y":3},{"x":5,"y":2},{"x":5,"y":1}]}]},{"turn":23,"food":[{"x":0,"y":4},{"x":1,"y":8},{"x":4,"y":0},{"x":8,"y":8},{"x":10,"y":4},{"x":10,"y":8}],"hazards":[],"moves":{"alpha":"down","bravo":"down","charlie":"left","delta":"left"},"snakes":[{"id":"alpha","name":"alpha","author":"","color":"#65d36e","health":99,"length":6,"latency":"","death":null,"body":[{"x":5,"y":4},{"x":5,"y":5},{"x":5,"y":6},{"x":5,"y":7},{"x":5,"y":8},{"x":6,"y":8}]},{"id":"bravo","name":"bravo","author":"","color":"#f2c94c","health":89,"length":4,"latency":"","death":null,"body":[{"x":7,"y":8},{"x":7,"y":9},{"x":8,"y":9},{"x":9,"y":9}]},{"id":"charlie","name":"charlie","author":"","color":"#65d36e","health":77,"length":3,"latency":"","death":null,"body":[{"x":1,"y":6},{"x":2,"y":6},{"x":3,"y":6}]},{"id":"delta","name":"delta","author":"","color":"#29b6f6","health":77,"length":3,"latency":"","death":null,"body":[{"x":4,"y":3},{"x":5,"y":3},{"x":5,"y":2}]}]},{"turn":24,"food":[{"x":0,"y":4},{"x":1,"y":8},{"x":4,"y":0},{"x":8,"y":8},{"x":10,"y":4},{"x":10,"y":8}],"hazards":[],"moves":{"alpha":"right","bravo":"down","charlie":"up","delta":"down"},"snakes":[{"id":"alpha","name":"alpha","author":"","color":"#65d36e","health":98,"length":6,"latency":"","death":null,"body":[{"x":6,"y":4},{"x":5,"y":4},{"x":5,"y":5},{"x":5,"y":6},{"x":5,"y":7},{"x":5,"y":8}]},{"id":"bravo","name":"bravo","author":"","color":"#f2c94c","health":88,"length":4,"latency":"","death":null,"body":[{"x":7,"y":7},{"x":7,"y":8},{"x":7,"y":9},{"x":8,"y":9}]},{"id":"charlie","name":"charlie","author":"","color":"#65d36e","health":76,"length":3,"latency":"","death":null,"body":[{"x":1,"y":7},{"x":1,"y":6},{"x":2,"y":6}]},{"id":"delta","name":"delta","author":"","color":"#29b6f6","health":76,"length":3,"latency":"","death":null,"body":[{"x":4,"y":2},{"x":4,"y":3},{"x":5,"y":3}]}]},{"turn":25,"food":[{"x":0,"y":4},{"x":1,"y":8},{"x":4,"y":0},{"x":8,"y":8},{"x":10,"y":4},{"x":10,"y":8}],"hazards":[],"moves":{"alpha":"right","bravo":"right","charlie":"right","delta":"left"},"snakes":[{"id":"alpha","name":"alpha","author":"","color":"#65d36e","health":97,"length":6,"latency":"","death":null,"body":[{"x":7,"y":4},{"x":6,"y":4},{"x":5,"y":4},{"x":5,"y":5},{"x":5,"y":6},{"x":5,"y":7}]},{"id":"bravo","name":"bravo","author":"","color":"#f2c94c","health":87,"length":4,"latency":"","death":null,"body":[{"x":8,"y":7},{"x":7,"y":7},{"x":7,"y":8},{"x":7,"y":9}]},{"id":"charlie","name":"charlie","author":"","color":"#65d36e","health":75,"length":3,"latency":"","death":null,"body":[{"x":2,"y":7},{"x":1,"y":7},{"x":1,"y":6}]},{"id":"delta","name":"delta","author":"","color":"#29b6f6","health":75,"length":3,"latency":"","death":null,"body":[{"x":3,"y":2},{"x":4,"y":2},{"x":4,"y":3}]}]},{"turn":26,"food":[{"x":0,"y":4},{"x":1,"y":8},{"x":4,"y":0},{"x":6,"y":5},{"x":10,"y":4},{"x":10,"y":8}],"hazards":[],"moves":{"alpha":"right","bravo":"up","charlie":"up","delta":"down"},"snakes":[{"id":"alpha","name":"alpha","author":"","color":"#65d36e","health":96,"length":6,"latency":"","death":null,"body":[{"x":8,"y":4},{"x":7,"y":4},{"x":6,"y":4},{"x":5,"y":4},{"x":5,"y":5},{"x":5,"y":6}]},{"id":"bravo","name":"bravo","author":"","color":"#f2c94c","health":100,"length":5,"latency":"","death":null,"body":[{"x":8,"y":8},{"x":8,"y":7},{"x":7,"y":7},{"x":7,"y":8},{"x":7,"y":9}]},{"id":"charlie","name":"charlie","author":"","color":"#65d36e","health":74,"length":3,"latency":"","death":null,"body":[{"x":2,"y":8},{"x":2,"y":7},{"x":1,"y":7}]},{"id":"delta","name":"delta","author":"","color":"#29b6f6","health":74,"length":3,"latency":"","death":null,"body":[{"x":3,"y":1},{"x":3,"y":2},{"x":4,"y":2}]}]},{"turn":27,"food":[{"x":0,"y":4},{"x":1,"y":8},{"x":4,"y":0},{"x":6,"y":5},{"x":10,"y":4},{"x":10,"y":8}],"hazards":[],"moves":{"alpha":"right","bravo":"right","charlie":"up","delta":"right"},"snakes":[{"id":"alpha","name":"alpha","author":"","color":"#65d36e","health":95,"length":6,"latency":"","death":null,"body":[{"x":9,"y":4},{"x":8,"y":4},{"x":7,"y":4},{"x":6,"y":4},{"x":5,"y":4},{"x":5,"y":5}]},{"id":"bravo","name":"bravo","author":"","color":"#f2c94c","health":99,"length":5,"latency":"","death":null,"body":[{"x":9,"y":8},{"x":8,"y":8},{"x":8,"y":7},{"x":7,"y":7},{"x":7,"y":8}]},{"id":"charlie","name":"charlie","author":"","color":"#65d36e","health":73,"length":3,"latency":"","death":null,"body":[{"x":2,"y":9},{"x":2,"y":8},{"x":2,"y":7}]},{"id":"delta","name":"delta","author":"","color":"#29b6f6","health":73,"length":3,"latency":"","death":null,"body":[{"x":4,"y":1},{"x":3,"y":1},{"x":3,"y":2}]}]},{"turn":28,"food":[{"x":0,"y":4},{"x":1,"y":8},{"x":4,"y":0},{"x":6,"y":5},{"x":10,"y":4},{"x":10,"y":8}],"hazards":[],"moves":{"alpha":"down","bravo":"up","charlie":"left","delta":"right"},"snakes":[{"id":"alpha","name":"alpha","author":"","color":"#65d36e","health":94,"length":6,"latency":"","death":null,"body":[{"x":9,"y":3},{"x":9,"y":4},{"x":8,"y":4},{"x":7,"y":4},{"x":6,"y":4},{"x":5,"y":4}]},{"id":"bravo","name":"bravo","author":"","color":"#f2c94c","health":98,"length":5,"latency":"","death":null,"body":[{"x":9,"y":9},{"x":9,"y":8},{"x":8,"y":8},{"x":8,"y":7},{"x":7,"y":7}]},{"id":"charlie","name":"charlie","author":"","color":"#65d36e","health":72,"length":3,"latency":"","death":null,"body":[{"x":1,"y":9},{"x":2,"y":9},{"x":2,"y":8}]},{"id":"delta","name":"delta","author":"","color":"#29b6f6","health":72,"length":3,"latency":"","death":null,"body":[{"x":5,"y":1},{"x":4,"y":1},{"x":3,"y":1}]}]},{"turn":29,"food":[{"x":0,"y":4},{"x":1,"y":8},{"x":4,"y":0},{"x":6,"y":5},{"x":10,"y":4},{"x":10,"y":8}],"hazards":[],"moves":{"alpha":"right","bravo":"right","charlie":"left","delta":"up"},"snakes":[{"id":"alpha","name":"alpha","author":"","color":"#65d36e","health":93,"length":6,"latency":"","death":null,"body":[{"x":10,"y":3},{"x":9,"y":3},{"x":9,"y":4},{"x":8,"y":4},{"x":7,"y":4},{"x":6,"y":4}]},{"id":"bravo","name":"bravo","author":"","color":"#f2c94c","health":97,"length":5,"latency":"","death":null,"body":[{"x":10,"y":9},{"x":9,"y":9},{"x":9,"y":8},{"x":8,"y":8},{"x":8,"y":7}]},{"id":"charlie","name":"charlie","author":"","color":"#65d36e","health":71,"length":3,"latency":"","death":null,"body":[{"x":0,"y":9},{"x":1,"y":9},{"x":2,"y":9}]},{"id":"delta","name":"delta","author":"","color":"#29b6f6","health":71,"length":3,"latency":"","death":null,"body":[{"x":5,"y":2},{"x":5,"y":1},{"x":4,"y":1}]}]},{"turn":30,"food":[{"x":0,"y":4},{"x":1,"y":8},{"x":4,"y":0},{"x":4,"y":10},{"x":6,"y":5},{"x":10,"y":8}],"hazards":[],"moves":{"alpha":"up","bravo":"up","charlie":"down","delta":"up"},"snakes":[{"id":"alpha","name":"alpha","author":"","color":"#65d36e","health":100,"length":7,"latency":"","death":null,"body":[{"x":10,"y":4},{"x":10,"y":3},{"x":9,"y":3},{"x":9,"y":4},{"x":8,"y":4},{"x":7,"y":4},{"x":6,"y":4}]},{"id":"bravo","name":"bravo","author":"","color":"#f2c94c","health":96,"length":5,"latency":"","death":null,"body":[{"x":10,"y":10},{"x":10,"y":9},{"x":9,"y":9},{"x":9,"y":8},{"x":8,"y":8}]},{"id":"charlie","name":"charlie","author":"","color":"#65d36e","health":70,"length":3,"latency":"","death":null,"body":[{"x":0,"y":8},{"x":0,"y":9},{"x":1,"y":9}]},{"id":"delta","name":"delta","author":"","color":"#29b6f6","health":70,"length":3,"latency":"","death":null,"body":[{"x":5,"y":3},{"x":5,"y":2},{"x":5,"y":1}]}]},{"turn":31,"food":[{"x":0,"y":4},{"x":1,"y":8},{"x":4,"y":0},{"x":4,"y":10},{"x":6,"y":5},{"x":10,"y":8}],"hazards":[],"moves":{"alpha":"up","bravo":"left","charlie":"down","delta":"up"},"snakes":[{"id":"alpha","name":"alpha","author":"","color":"#65d36e","health":99,"length":7,"latency":"","death":null,"body":[{"x":10,"y":5},{"x":10,"y":4},{"x":10,"y":3},{"x":9,"y":3},{"x":9,"y":4},{"x":8,"y":4},{"x":7,"y":4}]},{"id":"bravo","name":"bravo","author":"","color":"#f2c94c","health":95,"length":5,"latency":"","death":null,"body":[{"x":9,"y":10},{"x":10,"y":10},{"x":10,"y":9},{"x":9,"y":9},{"x":9,"y":8}]},{"id":"charlie","name":"charlie","author":"","color":"#65d36e","health":69,"length":3,"latency":"","death":null,"body":[{"x":0,"y":7},{"x":0,"y":8},{"x":0,"y":9}]},{"id":"delta","name":"delta","author":"","color":"#29b6f6","health":69,"length":3,"latency":"","death":null,"body":[{"x":5,"y":4},{"x":5,"y":3},{"x":5,"y":2}]}]},{"turn":32,"food":[{"x":0,"y":4},{"x":1,"y":8},{"x":4,"y":0},{"x":4,"y":10},{"x":6,"y":5},{"x":10,"y":8}],"hazards":[],"moves":{"alpha":"left","bravo":"left","charlie":"down","delta":"up"},"snakes":[{"id":"alpha","name":"alpha","author":"","color":"#65d36e","health":98,"length":7,"latency":"","death":null,"body":[{"x":9,"y":5},{"x":10,"y":5},{"x":10,"y":4},{"x":10,"y":3},{"x":9,"y":3},{"x":9,"y":4},{"x":8,"y":4}]},{"id":"bravo","name":"bravo","author":"","color":"#f2c94c","health":94,"length":5,"latency":"","death":null,"body":[{"x":8,"y":10},{"x":9,"y":10},{"x":10,"y":10},{"x":10,"y":9},{"x":9,"y":9}]},{"id":"charlie","name":"charlie","author":"","color":"#65d36e","health":68,"length":3,"latency":"","death":null,"body":[{"x":0,"y":6},{"x":0,"y":7},{"x":0,"y":8}]},{"id":"delta","name":"delta","author":"","color":"#29b6f6","health":68,"length":3,"latency":"","death":null,"body":[{"x":5,"y":5},{"x":5,"y":4},{"x":5,"y":3}]}]},{"turn":33,"food":[{"x":0,"y":4},{"x":1,"y":8},{"x":4,"y":0},{"x":4,"y":10},{"x":6,"y":5},{"x":10,"y":8}],"hazards":[],"moves":{"alpha":"left","bravo":"left","charlie":"right","delta":"up"},"snakes":[{"id":"alpha","name":"alpha","author":"","color":"#65d36e","health":97,"length":7,"latency":"","death":null,"body":[{"x":8,"y":5},{"x":9,"y":5},{"x":10,"y":5},{"x":10,"y":4},{"x":10,"y":3},{"x":9,"y":3},{"x":9,"y":4}]},{"id":"bravo","name":"bravo","author":"","color":"#f2c94c","health":93,"length":5,"latency":"","death":null,"body":[{"x":7,"y":10},{"x":8,"y":10},{"x":9,"y":10},{"x":10,"y":10},{"x":10,"y":9}]},{"id":"charlie","name":"charlie","author":"","color":"#65d36e","health":67,"length":3,"latency":"","death":null,"body":[{"x":1,"y":6},{"x":0,"y":6},{"x":0,"y":7}]},{"id":"delta","name":"delta","author":"","color":"#29b6f6","health":67,"length":3,"latency":"","death":null,"body":[{"x":5,"y":6},{"x":5,"y":5},{"x":5,"y":4}]}]},{"turn":34,"food":[{"x":0,"y":4},{"x":1,"y":8},{"x":4,"y":0},{"x":4,"y":10},{"x":6,"y":5},{"x":10,"y":8}],"hazards":[],"moves":{"alpha":"left","bravo":"left","charlie":"right","delta":"left"},"snakes":[{"id":"alpha","name":"alpha","author":"","color":"#65d36e","health":96,"length":7,"latency":"","death":null,"body":[{"x":7,"y":5},{"x":8,"y":5},{"x":9,"y":5},{"x":10,"y":5},{"x":10,"y":4},{"x":10,"y":3},{"x":9,"y":3}]},{"id":"bravo","name":"bravo","author":"","color":"#f2c94c","health":92,"length":5,"latency":"","death":null,"body":[{"x":6,"y":10},{"x":7,"y":10},{"x":8,"y":10},{"x":9,"y":10},{"x":10,"y":10}]},{"id":"charlie","name":"charlie","author":"","color":"#65d36e","health":66,"length":3,"latency":"","death":null,"body":[{"x":2,"y":6},{"x":1,"y":6},{"x":0,"y":6}]},{"id":"delta","name":"delta","author":"","color":"#29b6f6","health":66,"length":3,"latency":"","death":null,"body":[{"x":4,"y":6},{"x":5,"y":6},{"x":5,"y":5}]}]},{"turn":35,"food":[{"x":0,"y":4},{"x":1,"y":8},{"x":4,"y":0},{"x":4,"y":10},{"x":6,"y":5},{"x":10,"y":8}],"hazards":[],"moves":{"alpha":"down","bravo":"down","charlie":"up","delta":"down"},"snakes":[{"id":"alpha","name":"alpha","author":"","color":"#65d36e","health":95,"length":7,"latency":"","death":null,"body":[{"x":7,"y":4},{"x":7,"y":5},{"x":8,"y":5},{"x":9,"y":5},{"x":10,"y":5},{"x":10,"y":4},{"x":10,"y":3}]},{"id":"bravo","name":"bravo","author":"","color":"#f2c94c","health":91,"length":5,"latency":"","death":null,"body":[{"x":6,"y":9},{"x":6,"y":10},{"x":7,"y":10},{"x":8,"y":10},{"x":9,"y":10}]},{"id":"charlie","name":"charlie","author":"","color":"#65d36e","health":65,"length":3,"latency":"","death":null,"body":[{"x":2,"y":7},{"x":2,"y":6},{"x":1,"y":6}]},{"id":"delta","name":"delta","author":"","color":"#29b6f6","health":65,"length":3,"latency":"","death":null,"body":[{"x":4,"y":5},{"x":4,"y":6},{"x":5,"y":6}]}]},{"turn":36,"food":[{"x":0,"y":4},{"x":1,"y":8},{"x":4,"y":0},{"x":4,"y":10},{"x":6,"y":5},{"x":10,"y":8}],"hazards":[],"moves":{"alpha":"left","bravo":"left","charlie":"left","delta":"down"},"snakes":[{"id":"alpha","name":"alpha","author":"","color":"#65d36e","health":94,"length":7,"latency":"","death":null,"body":[{"x":6,"y":4},{"x":7,"y":4},{"x":7,"y":5},{"x":8,"y":5},{"x":9,"y":5},{"x":10,"y":5},{"x":10,"y":4}]},{"id":"bravo","name":"bravo","author":"","color":"#f2c94c","health":90,"length":5,"latency":"","death":null,"body":[{"x":5,"y":9},{"x":6,"y":9},{"x":6,"y":10},{"x":7,"y":10},{"x":8,"y":10}]},{"id":"charlie","name":"charlie","author":"","color":"#65d36e","health":64,"length":3,"latency":"","death":null,"body":[{"x":1,"y":7},{"x":2,"y":7},{"x":2,"y":6}]},{"id":"delta","name":"delta","author":"","color":"#29b6f6","health":64,"length":3,"latency":"","death":null,"body":[{"x":4,"y":4},{"x":4,"y":5},{"x":4,"y":6}]}]},{"turn":37,"food":[{"x":0,"y":4},{"x":1,"y":8},{"x":4,"y":0},{"x":4,"y":10},{"x":6,"y":5},{"x":10,"y":8}],"hazards":[],"moves":{"alpha":"left","bravo":"down","charlie":"down","delta":"down"},"snakes":[{"id":"alpha","name":"alpha","author":"","color":"#65d36e","health":93,"length":7,"latency":"","death":null,"body":[{"x":5,"y":4},{"x":6,"y":4},{"x":7,"y":4},{"x":7,"y":5},{"x":8,"y":5},{"x":9,"y":5},{"x":10,"y":5}]},{"id":"bravo","name":"bravo","author":"","color":"#f2c94c","health":89,"length":5,"latency":"","death":null,"body":[{"x":5,"y":8},{"x":5,"y":9},{"x":6,"y":9},{"x":6,"y":10},{"x":7,"y":10}]},{"id":"charlie","name":"charlie","author":"","color":"#65d36e","health":63,"length":3,"latency":"","death":null,"body":[{"x":1,"y":6},{"x":1,"y":7},{"x":2,"y":7}]},{"id":"delta","name":"delta","author":"","color":"#29b6f6","health":63,"length":3,"latency":"","death":null,"body":[{"x":4,"y":3},{"x":4,"y":4},{"x":4,"y":5}]}]},{"turn":38,"food":[{"x":0,"y":4},{"x":1,"y":8},{"x":4,"y":0},{"x":4,"y":10},{"x":6,"y":5},{"x":10,"y":8}],"hazards":[],"moves":{"alpha":"up","bravo":"down","charlie":"down","delta":"down"},"snakes":[{"id":"alpha","name":"alpha","author":"","color":"#65d36e","health":92,"length":7,"latency":"","death":null,"body":[{"x":5,"y":5},{"x":5,"y":4},{"x":6,"y":4},{"x":7,"y":4},{"x":7,"y":5},{"x":8,"y":5},{"x":9,"y":5}]},{"id":"bravo","name":"bravo","author":"","color":"#f2c94c","health":88,"length":5,"latency":"","death":null,"body":[{"x":5,"y":7},{"x":5,"y":8},{"x":5,"y":9},{"x":6,"y":9},{"x":6,"y":10}]},{"id":"charlie","name":"charlie","author":"","color":"#65d36e","health":62,"length":3,"latency":"","death":null,"body":[{"x":1,"y":5},{"x":1,"y":6},{"x":1,"y":7}]},{"id":"delta","name":"delta","author":"","color":"#29b6f6","health":62,"length":3,"latency":"","death":null,"body":[{"x":4,"y":2},{"x":4,"y":3},{"x":4,"y":4}]}]},{"turn":39,"food":[{"x":0,"y":4},{"x":1,"y":8},{"x":4,"y":0},{"x":4,"y":10},{"x":6,"y":5},{"x":10,"y":8}],"hazards":[],"moves":{"alpha":"up","bravo":"left","charlie":"down","delta":"down"},"snakes":[{"id":"alpha","name":"alpha","author":"","color":"#65d36e","health":91,"length":7,"latency":"","death":null,"body":[{"x":5,"y":6},{"x":5,"y":5},{"x":5,"y":4},{"x":6,"y":4},{"x":7,"y":4},{"x":7,"y":5},{"x":8,"y":5}]},{"id":"bravo","name":"bravo","author":"","color":"#f2c94c","health":87,"length":5,"latency":"","death":null,"body":[{"x":4,"y":7},{"x":5,"y":7},{"x":5,"y":8},{"x":5,"y":9},{"x":6,"y":9}]},{"id":"charlie","name":"charlie","author":"","color":"#65d36e","health":61,"length":3,"latency":"","death":null,"body":[{"x":1,"y":4},{"x":1,"y":5},{"x":1,"y":6}]},{"id":"delta","name":"delta","author":"","color":"#29b6f6","health":61,"length":3,"latency":"","death":null,"body":[{"x":4,"y":1},{"x":4,"y":2},{"x":4,"y":3}]}]},{"turn":40,"food":[{"x":0,"y":4},{"x":1,"y":8},{"x":4,"y":0},{"x":4,"y":10},{"x":6,"y":5},{"x":10,"y":8}],"hazards":[],"moves":{"alpha":"right","bravo":"up","charlie":"down","delta":"right"},"snakes":[{"id":"alpha","name":"alpha","author":"","color":"#65d36e","health":90,"length":7,"latency":"","death":null,"body":[{"x":6,"y":6},{"x":5,"y":6},{"x":5,"y":5},{"x":5,"y":4},{"x":6,"y":4},{"x":7,"y":4},{"x":7,"y":5}]},{"id":"bravo","name":"bravo","author":"","color":"#f2c94c","health":86,"length":5,"latency":"","death":null,"body":[{"x":4,"y":8},{"x":4,"y":7},{"x":5,"y":7},{"x":5,"y":8},{"x":5,"y":9}]},{"id":"charlie","name":"charlie","author":"","color":"#65d36e","health":60,"length":3,"latency":"","death":null,"body":[{"x":1,"y":3},{"x":1,"y":4},{"x":1,"y":5}]},{"id":"delta","name":"delta","author":"","color":"#29b6f6","health":60,"length":3,"latency":"","death":null,"body":[{"x":5,"y":1},{"x":4,"y":1},{"x":4,"y":2}]}]}]};
+    const board = document.getElementById("board");
+    const slider = document.getElementById("turn");
+    const play = document.getElementById("play");
+    const speed = document.getElementById("speed");
+    const title = document.getElementById("title");
+    const meta = document.getElementById("meta");
+    const turnLabel = document.getElementById("turnLabel");
+    const aliveLabel = document.getElementById("aliveLabel");
+    const snakes = document.getElementById("snakes");
+    let timer = null;
+
+    document.documentElement.style.setProperty("--board-w", replay.width);
+    document.documentElement.style.setProperty("--board-h", replay.height);
+    slider.max = String(replay.frames.length - 1);
+    title.textContent = replay.title || "Battlesnake Replay";
+    meta.textContent = `${replay.width}x${replay.height} · ${replay.frames.length} frames · ${replay.source || ""}`;
+
+    function key(p) { return `${p.x},${p.y}`; }
+
+    function render(index) {
+      const frame = replay.frames[index];
+      const food = new Set(frame.food.map(key));
+      const hazards = new Set((frame.hazards || []).map(key));
+      const bodies = new Map();
+      const heads = new Map();
+      const colors = new Map();
+      for (const snake of frame.snakes) {
+        colors.set(snake.id, snake.color);
+        snake.body.forEach((part, i) => {
+          const bucket = i === 0 ? heads : bodies;
+          bucket.set(key(part), snake.id);
+        });
+      }
+
+      board.innerHTML = "";
+      for (let y = replay.height - 1; y >= 0; y--) {
+        for (let x = 0; x < replay.width; x++) {
+          const cell = document.createElement("div");
+          const k = `${x},${y}`;
+          cell.className = "cell";
+          if (hazards.has(k)) cell.classList.add("hazard");
+          if (food.has(k)) cell.classList.add("food");
+          const bodyId = bodies.get(k);
+          const headId = heads.get(k);
+          if (bodyId) {
+            cell.classList.add("body");
+            cell.style.setProperty("--snake-color", colors.get(bodyId));
+          }
+          if (headId) {
+            cell.classList.add("head");
+            cell.style.setProperty("--snake-color", colors.get(headId));
+          }
+          board.appendChild(cell);
+        }
+      }
+
+      const lastTurn = replay.frames[replay.frames.length - 1].turn;
+      turnLabel.textContent = `turn ${frame.turn} / ${lastTurn}`;
+      aliveLabel.textContent = `alive ${frame.snakes.filter(s => !s.death).length}`;
+      snakes.innerHTML = "";
+      for (const snake of frame.snakes) {
+        const row = document.createElement("div");
+        row.className = "snake";
+        row.style.setProperty("--snake-color", snake.color);
+        const death = snake.death ? ` · out: ${snake.death.Cause || snake.death.cause || "dead"}` : "";
+        const author = snake.author ? ` · ${snake.author}` : "";
+        row.innerHTML = `
+          <span class="dot"></span>
+          <span class="name">
+            ${escapeHtml(snake.name || snake.id)}
+            <div class="detail">len ${snake.length} · hp ${snake.health ?? "-"} · lat ${snake.latency || "-"}${author}${death}</div>
+          </span>
+          <span class="move">${frame.moves[snake.id] || "-"}</span>
+        `;
+        snakes.appendChild(row);
+      }
+    }
+
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, ch => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      }[ch]));
+    }
+
+    function stop() {
+      clearInterval(timer);
+      timer = null;
+      play.textContent = "Play";
+    }
+
+    function start() {
+      timer = setInterval(() => {
+        let next = Number(slider.value) + 1;
+        if (next >= replay.frames.length) {
+          stop();
+          return;
+        }
+        slider.value = String(next);
+        render(next);
+      }, Number(speed.value));
+      play.textContent = "Pause";
+    }
+
+    play.addEventListener("click", () => timer ? stop() : start());
+    slider.addEventListener("input", () => render(Number(slider.value)));
+    speed.addEventListener("input", () => {
+      if (timer) {
+        stop();
+        start();
+      }
+    });
+    window.addEventListener("keydown", event => {
+      if (event.key === " ") {
+        event.preventDefault();
+        timer ? stop() : start();
+      }
+      if (event.key === "ArrowRight") {
+        slider.value = String(Math.min(Number(slider.value) + 1, replay.frames.length - 1));
+        render(Number(slider.value));
+      }
+      if (event.key === "ArrowLeft") {
+        slider.value = String(Math.max(Number(slider.value) - 1, 0));
+        render(Number(slider.value));
+      }
+    });
+    render(0);
+  </script>
+</body>
+</html>
