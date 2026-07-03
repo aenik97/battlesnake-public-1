@@ -1,20 +1,19 @@
 # Battlesnake Deterministic Search Bot
 
 A [Battlesnake](https://play.battlesnake.com) written in Python and Flask. This
-version uses a time-bounded deterministic engine as the primary policy, with the
-older embedded linear model kept as a fallback.
+version uses a five-strategy deterministic baseline as the primary policy, with
+the older embedded linear model kept as a fallback.
 
 ## What It Does
 
 Each turn, `logic.py`:
 
-- Calls `risk_ai_challenge.engine.choose_move`.
-- Filters unsafe moves.
-- Scores flood-fill territory, Voronoi/area control, food paths, length, health,
-  and head-to-head threats.
-- Uses A* for reachable food distance.
-- Spends remaining budget on shallow iterative search: alpha-beta for two-snake
-  boards and MaxN for multi-snake boards.
+- Calls `risk_ai_challenge.baseline.choose_move`.
+- Scores every move with five explicit baseline strategies:
+  survival, flood-fill space, A* food pathing, head-to-head pressure, and
+  multi-agent territory control.
+- Keeps the full tree-search engine available separately in
+  `risk_ai_challenge/engine.py`.
 - Falls back to the embedded pure-Python linear model and then a simple
   heuristic if anything unexpected happens.
 
@@ -23,6 +22,7 @@ Each turn, `logic.py`:
 
 - `backend.py` — Battlesnake HTTP server with `/`, `/start`, `/move`, and `/end`.
 - `logic.py` — compatibility entrypoint used by `backend.py`, plus model fallback.
+- `risk_ai_challenge/baseline.py` — readable five-strategy deterministic baseline.
 - `risk_ai_challenge/engine.py` — deterministic search, flood fill, A*, Voronoi,
   alpha-beta, MaxN, and board simulation.
 - `tests/` — unit tests for safety, pathfinding, territory, and collision rules.

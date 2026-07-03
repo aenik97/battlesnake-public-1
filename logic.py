@@ -1,8 +1,8 @@
 """Move-selection logic for the Battlesnake.
 
-The served policy uses the deterministic search engine first. The older linear
-ranking model and compact heuristic remain as fallbacks so gameplay still
-returns a legal move if the primary engine fails.
+The served policy uses the five-strategy deterministic baseline first. The older
+linear ranking model and compact heuristic remain as fallbacks so gameplay still
+returns a legal move if the primary baseline fails.
 
 Board coordinates: ``(0, 0)`` is the bottom-left corner.
   up    -> y + 1
@@ -16,7 +16,7 @@ Game-state schema reference: https://docs.battlesnake.com/api
 from collections import deque
 from typing import Dict, List, Optional, Set, Tuple
 
-from risk_ai_challenge.engine import choose_move as choose_move_engine
+from risk_ai_challenge.baseline import choose_move as choose_move_baseline
 
 Point = Tuple[int, int]
 
@@ -46,9 +46,9 @@ def get_info() -> Dict[str, str]:
 
 
 def choose_move(game_state: Dict) -> str:
-    """Return the next move using the deterministic search engine first."""
+    """Return the next move using the five-strategy baseline first."""
     try:
-        return choose_move_engine(game_state)
+        return choose_move_baseline(game_state)
     except Exception:  # noqa: BLE001 - gameplay must always return a move
         pass
 
