@@ -7,3 +7,6 @@ venv/
 
 # Local Battlesnake CLI output
 logs/
+
+# Training data and intermediate checkpoints
+data.npz
