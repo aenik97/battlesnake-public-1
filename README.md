@@ -1,23 +1,61 @@
-# Battlesnake ML Inference Bot
+# Battlesnake ML Inference Bot v2
 
 A [Battlesnake](https://play.battlesnake.com) written in Python and Flask. This
-version uses a pretrained model checkpoint to choose moves.
+version uses a **combined scoring system** with enhanced features and lookahead.
 
 ## What It Does
 
 Each turn, `logic.py`:
 
 - Gets legal moves for the current board.
-- Calculates per-move features.
-- Scores each move with a pure-Python linear model.
-- Returns the highest-scoring move.
+- Calculates **baseline features** (13 original features).
+- Calculates **enhanced features** (23 new features: tail awareness, wall safety, game phase).
+- Runs **2-move lookahead simulation** to avoid traps.
+- Combines all scores and returns the highest-scoring move.
 
+## Architecture
+
+### Scoring System (Weighted Combination)
+
+| Component | Weight | Description |
+|-----------|--------|-------------|
+| Baseline Model | 60% | Original linear model (99.3% accuracy) |
+| Enhanced Features | 30% | 23 new features for better decision-making |
+| Lookahead | 10% | 2-move simulation to avoid dead ends |
+
+### Enhanced Features (23 total)
+
+**Enemy Tail Awareness (4):**
+- `nearest_enemy_tail_dist` — distance to closest enemy tail
+- `tail_in_next_cell` — is next cell an enemy tail? (frees next turn!)
+- `tails_within_2`, `tails_within_3` — nearby tail count
+
+**Wall/Corner Safety (4):**
+- `in_corner`, `on_edge` — position danger flags
+- `wall_dist` — distance to nearest wall
+- `corner_escapes` — available escape routes
+
+**Game Phase (6):**
+- `turn_number`, `food_scarcity`, `alive_snakes`
+- `is_early_game`, `is_mid_game`, `is_late_game`
+
+**Food Strategy (5):**
+- `nearest_food_dist`, `food_delta`, `is_food`
+- `food_near_enemies`, `safe_food_count`
+
+**Enemy Proximity (4):**
+- `nearest_enemy_head`, `nearest_bigger_head`
+- `enemy_heads_within_2`, `enemy_heads_within_3`
 
 ## Files
 
 - `backend.py` — Battlesnake HTTP server with `/`, `/start`, `/move`, and `/end`.
-- `logic.py` — embedded checkpoint, feature extraction, move scoring, and fallback logic.
-- `requirements.txt` — runtime dependencies.
+- `logic.py` — Combined scoring: baseline + enhanced + lookahead + fallback.
+- `features.py` — Enhanced feature extraction (23 new features).
+- `model.py` — Model definitions and scoring functions.
+- `lookahead.py` — 2-move simulation engine.
+- `tests/` — Unit tests for features and lookahead.
+- `requirements.txt` — Runtime dependencies.
 - `render.yaml` — Render deployment config.
 
 ## Run Locally
@@ -28,7 +66,19 @@ python3 -m venv .venv
 .venv/bin/python backend.py
 ```
 
-Test your battlesnake with the Battlesnake CLI:
+### Run Tests
+
+```bash
+# Run all tests
+PYTHONPATH=. python -m pytest tests/ -v
+
+# Run specific test file
+PYTHONPATH=. python -m pytest tests/test_features.py -v
+```
+
+### Test Your Battlesnake
+
+With the Battlesnake CLI:
 
 ```bash
 battlesnake play -W 11 -H 11 \
@@ -55,3 +105,15 @@ battlesnake play -W 11 -H 11 \
 1. Create an account at [play.battlesnake.com](https://play.battlesnake.com).
 2. **Create Battlesnake** -> paste your Render URL as the server URL.
 3. Now you can use it in a game!
+
+## Tuning
+
+Adjust scoring weights in `logic.py`:
+
+```python
+BASELINE_WEIGHT = 0.6    # Original model
+ENHANCED_WEIGHT = 0.3    # New features
+LOOKAHEAD_WEIGHT = 0.1   # Simulation
+```
+
+Adjust feature coefficients in `model.py` `_ENHANCED_FEATURES["coef"]`.

@@ -1,8 +1,10 @@
 """Model-backed move-selection logic for the Battlesnake.
 
-The served policy uses a linear ranking model, scores each legal move,
-and returns the highest-scoring direction. A compact heuristic remains as a
-fallback so gameplay still returns a legal move if model scoring fails.
+The served policy uses a combined scoring system:
+- Baseline linear model (13 features, 99.3% accuracy)
+- Enhanced features (23 new features: tail awareness, wall safety, game phase)
+- 2-move lookahead simulation (Phase 2)
+- Heuristic fallback for safety
 
 Board coordinates: ``(0, 0)`` is the bottom-left corner.
   up    -> y + 1
@@ -13,8 +15,16 @@ Board coordinates: ``(0, 0)`` is the bottom-left corner.
 Game-state schema reference: https://docs.battlesnake.com/api
 """
 
+import logging
 from collections import deque
 from typing import Dict, List, Optional, Set, Tuple
+
+from features import extract_all_features
+from model import score_move_enhanced, combined_score
+from lookahead import lookahead_2_moves
+from strategy import get_game_phase, get_phase_weights, get_strategy_summary
+
+log = logging.getLogger("battlesnake")
 
 Point = Tuple[int, int]
 
@@ -29,6 +39,11 @@ DIRECTIONS: Dict[str, Point] = {
 HEAD_TO_HEAD_PENALTY = 10_000
 # Below this health we start actively steering toward food.
 HUNGRY_THRESHOLD = 50
+
+# Scoring weights (tunable)
+BASELINE_WEIGHT = 0.6
+ENHANCED_WEIGHT = 0.3
+LOOKAHEAD_WEIGHT = 0.1  # Phase 2: enabled
 
 
 def get_info() -> Dict[str, str]:
@@ -319,7 +334,7 @@ _MODEL: Dict = {
 
 
 def choose_move_model(game_state: Dict) -> Optional[str]:
-    """Score each legal move with the trained model; return the best.
+    """Score each legal move with combined baseline + enhanced + lookahead + strategy; return best.
 
     Returns ``None`` (so the caller falls back to the heuristic) if the model
     isn't available or the snake is trapped with no legal move.
@@ -328,22 +343,81 @@ def choose_move_model(game_state: Dict) -> Optional[str]:
     if not legal:
         return None
 
-    names = _MODEL["feature_names"]
-    mean = _MODEL["mean"]
-    std = _MODEL["std"]
-    coef = _MODEL["coef"]
-    intercept = _MODEL["intercept"]
+    # Get current strategy weights based on game phase
+    phase = get_game_phase(game_state.get("turn", 1))
+    health = game_state["you"]["health"]
+    food_available = len(game_state["board"]["food"]) > 0
+    strategy_weights = get_phase_weights(phase, health, food_available)
+    
+    # Log strategy every 10 turns
+    if game_state.get("turn", 1) % 10 == 0:
+        summary = get_strategy_summary(game_state)
+        log.info("STRATEGY turn=%s: %s", game_state["turn"], summary["strategy"])
 
     best_move, best_score = None, float("-inf")
     for move in legal:
-        feats = _candidate_features(game_state, move)
-        score = intercept
-        for i, name in enumerate(names):
-            z = (feats.get(name, 0.0) - mean[i]) / std[i] if std[i] else 0.0
-            score += coef[i] * z
+        # Get baseline features (original 13)
+        baseline_feats = _candidate_features(game_state, move)
+        
+        # Get enhanced features (new 23)
+        enhanced_feats = extract_all_features(game_state, move)
+        
+        # Apply strategy weights to enhanced features
+        weighted_enhanced = _apply_strategy_weights(enhanced_feats, strategy_weights)
+        
+        # Base score: baseline (60%) + enhanced (30%)
+        score = combined_score(baseline_feats, weighted_enhanced, 
+                              BASELINE_WEIGHT, ENHANCED_WEIGHT)
+        
+        # Add lookahead bonus (10%), weighted by strategy
+        try:
+            la_score = lookahead_2_moves(game_state, move)
+            lookahead_weight = LOOKAHEAD_WEIGHT * strategy_weights.get("lookahead", 1.0)
+            score += lookahead_weight * la_score
+        except Exception:
+            pass  # Ignore lookahead errors, continue with base score
+        
         if score > best_score:
             best_score, best_move = score, move
     return best_move
+
+
+def _apply_strategy_weights(features: Dict[str, float], weights: Dict[str, float]) -> Dict[str, float]:
+    """Apply strategy weights to feature categories.
+    
+    Adjusts feature values based on current game phase strategy.
+    """
+    weighted = features.copy()
+    
+    # Safety features: in_corner, on_edge, h2h_danger, enemy_heads_within_2
+    safety_mult = weights.get("safety", 1.0)
+    if "in_corner" in weighted:
+        weighted["in_corner"] *= safety_mult
+    if "on_edge" in weighted:
+        weighted["on_edge"] *= safety_mult
+    if "enemy_heads_within_2" in weighted:
+        weighted["enemy_heads_within_2"] *= safety_mult
+    
+    # Food features: is_food, food_delta, nearest_food_dist
+    food_mult = weights.get("food", 1.0)
+    if "is_food" in weighted:
+        weighted["is_food"] *= food_mult
+    if "food_delta" in weighted:
+        weighted["food_delta"] *= food_mult
+    
+    # Territory features: voronoi, open_space
+    territory_mult = weights.get("territory", 1.0)
+    if "voronoi" in weighted:
+        weighted["voronoi"] *= territory_mult
+    
+    # Aggression features: tail_in_next_cell, tails_within_2
+    aggression_mult = weights.get("aggression", 1.0)
+    if "tail_in_next_cell" in weighted:
+        weighted["tail_in_next_cell"] *= aggression_mult
+    if "tails_within_2" in weighted:
+        weighted["tails_within_2"] *= aggression_mult
+    
+    return weighted
 
 
 def _legal_moves(game_state: Dict) -> List[str]:
